@@ -165,7 +165,7 @@ h3 {
 }
 
 /* Media Query: for phones (Vertical) */
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 400px) {
   .player-container {
     width: 91vw;
   }
