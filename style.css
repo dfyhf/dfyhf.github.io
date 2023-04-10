@@ -135,13 +135,15 @@ h3 {
 .player-controls {
   display: flex;
   justify-content: center;
-  align-items: center;
   position: relative;
   top: -15px;
-  width: 200px;
-  margin: 0 auto;
 }
 
+.main-button {
+  font-size: 40px;
+  position: relative;
+  top: 3px;
+}
 
 .fa-solid {
   font-size: 30px;
@@ -150,14 +152,11 @@ h3 {
   cursor: pointer;
   user-select: none;
 }
+
 .fa-solid:hover {
   filter: brightness(70%);
 }
-.main-button {
-  font-size: 40px;
-  position: relative;
-  top: 3px;
-}
+
 .brand {
     font-family: 'Inknut Antiqua', serif;
     font-weight: 700;
