@@ -9,7 +9,7 @@ body {
   margin: 0;
   min-height: 100vh;
   background-color: #5B5B5B;
-  font-family: "Inknut Antiqua", serif;
+  font-family: "Merriweather", serif;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,7 +28,7 @@ body::before {
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
-  opacity: 0.25;
+  opacity: 0.75;
   z-index: -1;
 }
 
