@@ -138,12 +138,15 @@ h3 {
   justify-content: center;
   align-items: center;
   width: 100%;
+  position: relative;
+  top: 0px;
 }
+
 
 .main-button {
   font-size: 40px;
   position: relative;
-  top: 3px;
+  top: -3px;
 }
 
 .fa-solid {
