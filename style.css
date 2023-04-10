@@ -184,4 +184,9 @@ h3 {
     top: -10px;
     left: 100px;
   }
+
+@media screen and (max-width: 768px) {
+  body::before {
+    background-position: top right;
+  }
 }
