@@ -28,7 +28,7 @@ body::before {
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
-  opacity: 0.25;
+  opacity: 0.5;
   z-index: -1;
 }
 
