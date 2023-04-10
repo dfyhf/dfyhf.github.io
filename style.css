@@ -147,7 +147,7 @@ h3 {
 .main-button {
   font-size: 40px;
   position: relative;
-  top: -3px;
+  top: 0px;
 }
 
 .fa-solid {
