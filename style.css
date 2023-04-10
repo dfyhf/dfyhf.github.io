@@ -133,12 +133,12 @@ h3 {
 
 /* Controls */
 .player-controls {
-  display: flex;
-  justify-content: center;
-  position: relative;
-  top: -15px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
 }
+
 
 .main-button {
   font-size: 40px;
