@@ -14,6 +14,16 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 12px;
+  
+   display: flex;
+  /* center vertically in flex */
+  align-items: center;
+  /* center horizontally in flex */
+  justify-content: center;
+
+  font-size: 12px;
+  /* flex-direction: column; */
+}
 }
 
 body::before {
