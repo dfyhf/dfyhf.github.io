@@ -19,7 +19,7 @@ const songs = [
   {
     name: "The Garden Path",
     displayName: "The Garden Path",
-    artist: "Iterations",
+    artist: "iterations",
   },
   {
     name: "Decades",
@@ -29,37 +29,37 @@ const songs = [
   {
     name: "← ↑ Arrows ↓→",
     displayName: "← ↑ Arrows ↓→",
-    artist: "Iterations",
+    artist: "iterations",
   },
   {
     name: "Smoke-Filled Rooms",
     displayName: "Smoke-Filled Rooms",
-    artist: "Iterations",
+    artist: "iterations",
   },
   {
     name: "Passing Thoughts",
     displayName: "Passing Thoughts",
-    artist: "Iterations",
+    artist: "iterations",
   },
   {
     name: "Reorient",
     displayName: "Reorient",
-    artist: "Iterations",
+    artist: "iterations",
   },
    {
     name: "Recursion",
     displayName: "Recursion",
-    artist: "Iterations",
+    artist: "iterations",
   },
    {
     name: "The Weigh Out",
     displayName: "The Weigh Out",
-    artist: "Iterations",
+    artist: "iterations",
   },
    {
     name: "Permaculture",
     displayName: "Permaculture",
-    artist: "Iterations",
+    artist: "iterations",
   },
 ];
 // boolean to check play or pause
