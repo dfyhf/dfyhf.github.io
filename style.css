@@ -189,8 +189,13 @@ h3 {
   }
   .img-container {
     left: 29px;
-    height: 200px; /* Adjust this value for smaller album art */
-    width: 200px; /* Adjust this value for smaller album art */
+    height: 250px; /* Adjust this value for smaller album art */
+    width: 250px; /* Adjust this value for smaller album art */
+    top: -20px;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .img-container img {
