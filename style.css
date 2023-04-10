@@ -105,6 +105,7 @@ h3 {
   font-weight: 400;
   margin: 5px 0 0;
   font-family: 'Inknut Antiqua', serif;
+  margin-bottom: -10px; 
 }
 
 /* Progress */
