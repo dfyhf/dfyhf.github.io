@@ -189,7 +189,7 @@ h3 {
 
   .player-controls {
     top: -10px;
-    left: 100px;
+    justify-content: center;
   }
 }
 }
