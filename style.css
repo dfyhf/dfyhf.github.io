@@ -136,11 +136,9 @@ h3 {
 /* Controls */
 .player-controls {
   display: flex;
-  justify-content: center;
+  justify-content: space-around; /* Add this line */
   align-items: center;
-  width: 100%;
-  position: relative;
-  top: 0px;
+  width: 300px; /* Update this line */
 }
 
 
