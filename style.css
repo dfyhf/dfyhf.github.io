@@ -182,41 +182,5 @@ h3 {
     text-shadow: 0 0 2px black;
 }
 
-/* Media Query: for phones (Vertical) */
-@media screen and (max-width: 400px) {
-  .player-container {
-    width: 91vw;
-  }
-  .img-container {
-    left: 29px;
-    height: 250px; /* Adjust this value for smaller album art */
-    width: 250px; /* Adjust this value for smaller album art */
-    top: -20px;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-  }
 
-  .img-container img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    border-radius: 10px;
-  }
-  }
-
-  h2 {
-    font-size: 20px;
-  }
-
-  h3 {
-    font-size: 15px;
-  }
-
-  .player-controls {
-    top: -10px;
-    justify-content: center;
-  }
-}
 }
