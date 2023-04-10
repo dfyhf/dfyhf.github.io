@@ -161,7 +161,6 @@ h3 {
     left: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    text-shadow: 0 0 2px black;
 }
 
 /* Media Query: for phones (Vertical) */
