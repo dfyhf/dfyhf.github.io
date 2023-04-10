@@ -133,11 +133,15 @@ h3 {
 
 /* Controls */
 .player-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
   top: -15px;
-  left: 120px;
   width: 200px;
+  margin: 0 auto;
 }
+
 
 .fa-solid {
   font-size: 30px;
