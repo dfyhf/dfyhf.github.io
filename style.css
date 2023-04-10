@@ -28,6 +28,7 @@ body::before {
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
+  background-position: top right;
   opacity: 0.60;
   z-index: -1;
 }
@@ -165,11 +166,7 @@ h3 {
 }
 
 /* Media Query: for phones (Vertical) */
-@media screen and (max-width: 500px) {
-  body::before {
-    background-position: top right;
-  }
-
+@media screen and (max-width: 400px) {
   .player-container {
     width: 91vw;
   }
