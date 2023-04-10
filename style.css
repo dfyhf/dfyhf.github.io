@@ -134,11 +134,18 @@ h3 {
 }
 
 /* Controls */
+.player-controls-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 .player-controls {
   display: flex;
-  justify-content: space-around; /* Add this line */
+  justify-content: center;
   align-items: center;
-  width: 300px; /* Update this line */
+  width: 100%;
 }
 
 
