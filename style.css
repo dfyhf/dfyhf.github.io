@@ -186,5 +186,8 @@ h3 {
     font-size: 15px;
   }
 
-  
+  .player-controls {
+    top: -10px;
+    left: 100px;
+  }
 }
