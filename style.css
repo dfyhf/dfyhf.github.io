@@ -76,7 +76,7 @@ nav ul li a:hover {
 .img-container {
   height: 300px;
   width: 300px;
-  position: center;
+  position: relative;
   top: -30px;
   left: 50px;
 }
