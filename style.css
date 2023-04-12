@@ -149,9 +149,6 @@ h3 {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-  top: -15px;
-  width: 200px;
 }
 
 
