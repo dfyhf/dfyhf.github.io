@@ -9,7 +9,7 @@ body {
   position: relative;
   margin: 0;
   min-height: 100vh;
-  background-color: #637692;
+  background-color: #5B5B5B;
   font-family: "Merriweather", serif;
   display: flex;
   align-items: center;
@@ -70,7 +70,7 @@ nav ul li a:hover {
 .player-container {
   height: 500px;
   width: 400px;
-  background: #333;
+  background: #637692;
   border-radius: 20px;
   box-shadow: 0px 15px 30px 5px rgba(51, 51, 51, 0.4);
   color: bisque;
