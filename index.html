@@ -1,31 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- begin open graph tags -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="iterations.band/" />
-    <meta property="og:type" content="website" />
-    <meta
-      property="og:url"
-      content="iteratinos.band/"
-    />
-    <meta
-      property="og:description"
-      content="Post-Psych/Groove-Grunge/Drone."
-    />
-    <meta property="og:image" content="/music_player.jpg" />
-    <!-- end open graph tags -->
-    <!-- begin traditional metadata tags -->
-    <meta
-      name="description"
-      content="Iterations is a band located in Asheville, NC and Boulder, CO."
-    />
+    <!-- existing metadata tags -->
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- end traditional metadata tags -->
     <title>iterations.band/</title>
     
     <link
@@ -38,17 +16,20 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
     />
     <link rel="stylesheet" href="./style.css" />
+    
+    <style>
+      .player-container {
+        background-image: url('/img/bw.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding: 20px;
+        border-radius: 10px;
+      }
+    </style>
   </head>
   <body>
-      <header>
-        <div class="brand">iterations</div>
-        <nav>
-            <ul>
-                
-                
-            </ul>
-        </nav>
-    </header>
+    <!-- existing header and nav -->
     <div class="player-container">
       <!-- song -->
       <div class="img-container">
@@ -62,7 +43,6 @@
       <audio src=""></audio>
       <!-- progress -->
       <div class="progress-container" id="progress-container">
-        <!-- this progress is the seek of the song, as the song goes -->
         <div class="progress" id="progress"></div>
         <div class="duration-wrapper">
           <span id="current-time">0:00</span>
@@ -75,6 +55,7 @@
           <i class="fa-solid fa-backward" id="prev" title="Previous"></i>
           <i class="fa-solid fa-play main-button" id="play" title="Play"></i>
           <i class="fa-solid fa-forward" id="next" title="Next"></i>
+        </div>
       </div>
     </div>
     <!-- script -->
