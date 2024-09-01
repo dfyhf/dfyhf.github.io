@@ -28,7 +28,15 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         max-width: 500px;
         margin: auto;
-        height: 300px;
+        height: 100%; /* Use 100% height to fill the container */
+        min-height: 300px; /* Ensure a minimum height to avoid shrinking */
+      }
+
+      /* Optional: Ensure the image container respects the player's size */
+      .img-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
       }
     </style>
   </head>
@@ -38,7 +46,7 @@
       <!-- song -->
       <div class="img-container">
         <img
-          src="/img/TGP.png"
+          src="/img/Clean.jpeg"
           alt="Album Art"
         />
       </div>
