@@ -1,193 +1,82 @@
-@import url("https://fonts.googleapis.com/css2?family=Merriweather&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@700&display=swap");
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- begin open graph tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="iterations.band/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="iterations.band/" />
+    <meta property="og:description" content="Post-Psych/Groove-Grunge/Drone." />
+    <meta property="og:image" content="/Clean.jpeg" />
+    <!-- end open graph tags -->
 
-html {
-  box-sizing: border-box;
-}
+    <!-- begin traditional metadata tags -->
+    <meta name="description" content="Iterations is a band located in Asheville, NC and Boulder, CO." />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- end traditional metadata tags -->
 
-body {
-  position: relative;
-  margin: 0;
-  min-height: 100vh;
-  background-color: #5B5B5B;
-  font-family: "Merriweather", serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-}
+    <title>iterations.band/</title>
 
-body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('./img/IMG_2917.jpg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: top right;
-  opacity: 0.60;
-  z-index: -1;
-}
+    <link rel="icon" type="image/png" href="/img/TGP.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+    <link rel="stylesheet" href="./style.css" />
 
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50px;
-  background-color: #333 !important; /* Force solid grey */
-  z-index: 100;
-}
+    <style>
+      /* Fade-in animation */
+      body {
+        opacity: 0;
+        animation: fadeIn 1s ease-in forwards;
+      }
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
 
-nav ul {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  list-style-type: none;
-  margin: 0;
-  padding: 1rem;
-}
+  <body>
+    <header style="background-color: rgba(51, 51, 51, 0.8);">
+      <div class="brand">iterations</div>
+      <nav>
+        <ul>
+          <!-- Empty for now but ready for links -->
+        </ul>
+      </nav>
+    </header>
 
-nav ul li {
-  margin: 0 1rem;
-}
+    <div class="player-container">
+      <!-- song -->
+      <div class="img-container">
+        <img src="/img/Clean.jpeg" alt="Album Art" />
+      </div>
+      <h2 id="title"></h2>
+      <h3 id="artist"></h3>
+      <audio src=""></audio>
 
-nav ul li a {
-  color: #fff;
-  text-decoration: none;
-}
+      <!-- progress -->
+      <div class="progress-container" id="progress-container">
+        <div class="progress" id="progress"></div>
+        <div class="duration-wrapper">
+          <span id="current-time">0:00</span>
+          <span id="duration">6:27</span>
+        </div>
+      </div>
 
-nav ul li a:hover {
-  text-decoration: underline;
-}
+      <!-- controls -->
+      <div class="player-controls-wrapper">
+        <div class="player-controls">
+          <i class="fa-solid fa-backward" id="prev" title="Previous"></i>
+          <i class="fa-solid fa-play main-button" id="play" title="Play"></i>
+          <i class="fa-solid fa-forward" id="next" title="Next"></i>
+        </div>
+      </div>
+    </div>
 
-.player-container {
-  height: 500px;
-  width: 340px; /* Slimmer player */
-  background: rgba(15, 15, 15, 0.3); /* Darker tone, more transparent */
-  backdrop-filter: none; /* No blur */
-  border-radius: 25px;
-  box-shadow: 
-    0px 8px 20px rgba(0, 0, 0, 0.6), /* Black outer glow */
-    0px 0px 10px rgba(0, 0, 0, 0.5); /* Secondary black glow */
-  color: bisque;
-  margin-top: 70px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.img-container {
-  height: 280px;
-  width: 280px;
-  position: relative;
-  top: -20px;
-  left: 30px;
-  overflow: hidden;
-  box-shadow: 0px 0px 45px rgba(255, 255, 255, 0.45); /* Strong white glow */
-  border-radius: 0px; /* No rounding */
-}
-
-.img-container img {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  border-radius: 0px; /* Sharp corners */
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
-
-.img-container img:hover {
-  transform: scale(1.05);
-  box-shadow: 0px 0px 60px rgba(255, 255, 255, 0.6); /* Even stronger white glow on hover */
-}
-
-h2 {
-  font-size: 25px;
-  text-align: center;
-  margin: 0;
-  text-shadow: 0 0 5px rgba(0, 0, 0, 0.7); /* Soft black shadow around song title */
-}
-
-h3 {
-  font-size: 24px;
-  text-align: center;
-  font-weight: 400;
-  margin: 5px 0 0;
-  font-family: 'Inknut Antiqua', serif;
-  margin-top: -10px;
-  margin-bottom: -20px;
-  text-shadow: 0 0 5px rgba(0, 0, 0, 0.7); /* Soft black shadow around artist */
-}
-
-/* Progress */
-.progress-container {
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 60px 20px 10px 20px; /* Lower the progress bar */
-  height: 3px;
-  width: 90%;
-}
-
-.progress {
-  background: black;
-  border-radius: 5px;
-  height: 100%;
-  width: 0%;
-  transition: width 0.1s linear;
-}
-
-.duration-wrapper {
-  position: relative;
-  top: -25px;
-  display: flex;
-  justify-content: space-between;
-  color: bisque;
-}
-
-/* Controls */
-.player-controls-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin-top: 40px; /* Lower the player controls */
-}
-
-.player-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.main-button {
-  font-size: 40px;
-  position: relative;
-  top: 0px;
-}
-
-.fa-solid {
-  font-size: 30px;
-  color: bisque;
-  margin: 0 15px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.fa-solid:hover {
-  filter: brightness(70%);
-}
-
-.brand {
-  font-family: 'Inknut Antiqua', serif;
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: bisque;
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  text-shadow: 0 0 2px black;
-}
+    <!-- script -->
+    <script src="./script.js"></script>
+  </body>
+</html>
