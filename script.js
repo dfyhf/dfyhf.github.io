@@ -1,55 +1,101 @@
-const image = document.querySelector('img');
-const title = document.getElementById('title');
-const artist = document.getElementById('artist');
-const music = document.querySelector('audio');
-const progressContainer = document.getElementById('progress-container');
-const progress = document.getElementById('progress');
-const prevBtn = document.getElementById('prev');
-const playBtn = document.getElementById('play');
-const nextBtn = document.getElementById('next');
-const durationEl = document.getElementById('duration');
-const currentTimeEl = document.getElementById('current-time');
+const image = document.querySelector("img");
+const title = document.getElementById("title");
+const artist = document.getElementById("artist");
 
-// Music
+const music = document.querySelector("audio");
+
+const progressContainer = document.getElementById("progress-container");
+const progress = document.getElementById("progress");
+
+const currentTimeEle = document.getElementById("current-time");
+const durationEle = document.getElementById("duration");
+
+const prevBtn = document.getElementById("prev");
+const playBtn = document.getElementById("play");
+const nextBtn = document.getElementById("next");
+
+// array of songs to insert
 const songs = [
   {
-    name: 'Clean',
-    displayName: 'Clean',
-    artist: 'Iterations',
+    name: "The Garden Path",
+    displayName: "The Garden Path",
+    artist: "iterations",
+  },
+  {
+    name: "Decades",
+    displayName: "Decades",
+    artist: "iterations",
+  },
+  {
+    name: "← ↑ Arrows ↓→",
+    displayName: "← ↑ Arrows ↓→",
+    artist: "iterations",
+  },
+  {
+    name: "Smoke-Filled Rooms",
+    displayName: "Smoke-Filled Rooms",
+    artist: "iterations",
+  },
+  {
+    name: "Passing Thoughts",
+    displayName: "Passing Thoughts",
+    artist: "iterations",
+  },
+  {
+    name: "Reorient",
+    displayName: "Reorient",
+    artist: "iterations",
+  },
+   {
+    name: "Recursion",
+    displayName: "Recursion",
+    artist: "iterations",
+  },
+   {
+    name: "The Weigh Out",
+    displayName: "The Weigh Out",
+    artist: "iterations",
+  },
+   {
+    name: "Permaculture",
+    displayName: "Permaculture",
+    artist: "iterations",
   },
 ];
-
-// Check if Playing
+// boolean to check play or pause
 let isPlaying = false;
 
-// Play
+// play function
 function playSong() {
   isPlaying = true;
-  playBtn.classList.replace('fa-play', 'fa-pause');
-  playBtn.setAttribute('title', 'Pause');
+  playBtn.classList.replace("fa-play", "fa-pause");
+  playBtn.setAttribute("title", "Pause");
   music.play();
 }
 
-// Pause
+// pause function
 function pauseSong() {
   isPlaying = false;
-  playBtn.classList.replace('fa-pause', 'fa-play');
-  playBtn.setAttribute('title', 'Play');
+  playBtn.classList.replace("fa-pause", "fa-play");
+  playBtn.setAttribute("title", "Play");
   music.pause();
 }
 
-// Load Song
+// play or pause button event listener
+playBtn.addEventListener("click", () => (isPlaying ? pauseSong() : playSong()));
+
+// function that add songs in DOM elements
 function loadSong(song) {
   title.textContent = song.displayName;
   artist.textContent = song.artist;
-  music.src = `music/${song.name}.mp3`;
-  image.src = `img/${song.name}.jpeg`;
+  music.src = `./music/${song.name}.mp3`;
+  image.src = `./img/${song.name}.jpg`;
 }
-
-// Current Song
+    
+// current song update DOM
 let songIndex = 0;
 
-// Previous Song
+// previous song
 function prevSong() {
   songIndex--;
   if (songIndex < 0) {
@@ -58,8 +104,7 @@ function prevSong() {
   loadSong(songs[songIndex]);
   playSong();
 }
-
-// Next Song
+// next song
 function nextSong() {
   songIndex++;
   if (songIndex > songs.length - 1) {
@@ -69,69 +114,51 @@ function nextSong() {
   playSong();
 }
 
-// Update Progress Bar
+// on loading first time, selecting first song
+loadSong(songs[songIndex]);
+
+// update progress bar and time
 function updateProgressBar(e) {
   if (isPlaying) {
     const { duration, currentTime } = e.srcElement;
+    // console.log(duration, currentTime);
+    // update progress bar width
     const progressPercent = (currentTime / duration) * 100;
+    // console.log(progressPercent);
     progress.style.width = `${progressPercent}%`;
-
-    // Calculate display for duration
+    // calculate display duration of song
     const durationMinutes = Math.floor(duration / 60);
     let durationSeconds = Math.floor(duration % 60);
     if (durationSeconds < 10) {
       durationSeconds = `0${durationSeconds}`;
     }
-    if (durationSeconds) {
-      durationEl.textContent = `${durationMinutes}:${durationSeconds}`;
-    }
 
-    // Calculate display for currentTime
+    // delaying switching element duration to avoid NaN
+    if (durationSeconds) {
+      durationEle.textContent = `${durationMinutes}:${durationSeconds}`;
+    }
+    // calculate current display duration of song
     const currentMinutes = Math.floor(currentTime / 60);
     let currentSeconds = Math.floor(currentTime % 60);
     if (currentSeconds < 10) {
       currentSeconds = `0${currentSeconds}`;
     }
-    currentTimeEl.textContent = `${currentMinutes}:${currentSeconds}`;
+    currentTimeEle.textContent = `${currentMinutes}:${currentSeconds}`;
   }
 }
-
-// Set Progress Bar
+// set progress bar function
 function setProgressBar(e) {
+  // console.log(e);
   const width = this.clientWidth;
-  const clickX = e.offsetX;
+  const clickValue = e.offsetX;
   const { duration } = music;
-  music.currentTime = (clickX / width) * duration;
+  music.currentTime = (clickValue / width) * duration;
 }
+// event listeners for buttons
+prevBtn.addEventListener("click", prevSong);
+nextBtn.addEventListener("click", nextSong);
 
-// Event Listeners
-playBtn.addEventListener('click', () => {
-  if (isPlaying) {
-    pauseSong();
-  } else {
-    playSong();
-  }
-});
+music.addEventListener("timeupdate", updateProgressBar);
+progressContainer.addEventListener("click", setProgressBar);
 
-prevBtn.addEventListener('click', () => {
-  prevSong();
-});
-
-nextBtn.addEventListener('click', () => {
-  nextSong();
-});
-
-music.addEventListener('timeupdate', updateProgressBar);
-music.addEventListener('ended', nextSong);
-progressContainer.addEventListener('click', setProgressBar);
-
-// Mobile touch fix: prevent button staying dark after tap
-const allButtons = [playBtn, prevBtn, nextBtn];
-allButtons.forEach(button => {
-  button.addEventListener('touchend', () => {
-    button.blur();
-  });
-});
-
-// Load the first song
-loadSong(songs[songIndex]);
+music.addEventListener("ended", nextSong);
