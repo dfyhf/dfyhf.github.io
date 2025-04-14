@@ -66,7 +66,7 @@ nav ul li a:hover {
 }
 
 .player-container {
-  height: 580px; /* Increased height for better top spacing */
+  height: 500px;
   width: 340px; /* Slimmer player */
   background: rgba(15, 15, 15, 0.3); /* Darker tone, more transparent */
   backdrop-filter: none; /* No blur */
@@ -83,7 +83,7 @@ nav ul li a:hover {
   height: 280px;
   width: 280px;
   position: relative;
-  top: 20px; /* Lowered the image a bit to center it better */
+  top: -20px;
   left: 30px;
   overflow: hidden;
   box-shadow: 0px 0px 45px rgba(255, 255, 255, 0.45); /* Strong white glow */
