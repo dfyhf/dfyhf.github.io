@@ -128,7 +128,9 @@ h2 {
     0 0 18px rgba(0, 0, 0, 0.7);
   animation: fadeIn 1s ease-in both;
   animation-delay: 0.5s;
-  /* NO text stroke, soft clean glow only */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h3 {
@@ -144,7 +146,9 @@ h3 {
     0 0 20px rgba(0, 0, 0, 0.75);
   animation: fadeIn 1s ease-in both;
   animation-delay: 0.7s;
-  -webkit-text-stroke: 0.5px black;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Progress */
