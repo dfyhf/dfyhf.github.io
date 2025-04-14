@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,76 +6,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:title" content="iterations.band/" />
     <meta property="og:type" content="website" />
-    <meta
-      property="og:url"
-      content="iterations.band/"
-    />
-    <meta
-      property="og:description"
-      content="Post-Psych/Groove-Grunge/Drone."
-    />
+    <meta property="og:url" content="iterations.band/" />
+    <meta property="og:description" content="Post-Psych/Groove-Grunge/Drone." />
     <meta property="og:image" content="/Clean.jpeg" />
     <!-- end open graph tags -->
+
     <!-- begin traditional metadata tags -->
-    <meta
-      name="description"
-      content="Iterations is a band located in Asheville, NC and Boulder, CO."
-    />
+    <meta name="description" content="Iterations is a band located in Asheville, NC and Boulder, CO." />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- end traditional metadata tags -->
+
     <title>iterations.band/</title>
-    
-    <link
-      rel="icon"
-      type="image/png"
-      href="/img/TGP.png"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-    />
+
+    <link rel="icon" type="image/png" href="/img/TGP.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
     <link rel="stylesheet" href="./style.css" />
+
+    <style>
+      /* Fade-in animation */
+      body {
+        opacity: 0;
+        animation: fadeIn 1s ease-in forwards;
+      }
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
   </head>
+
   <body>
-      <header>
-        <div class="brand">iterations</div>
-        <nav>
-            <ul>
-                
-                
-            </ul>
-        </nav>
+    <header style="background-color: rgba(51, 51, 51, 0.8);">
+      <div class="brand">iterations</div>
+      <nav>
+        <ul>
+          <!-- Empty for now but ready for links -->
+        </ul>
+      </nav>
     </header>
+
     <div class="player-container">
       <!-- song -->
       <div class="img-container">
-        <img
-          src="/img/Clean.jpeg"
-          alt="Album Art"
-        />
+        <img src="/img/Clean.jpeg" alt="Album Art" />
       </div>
       <h2 id="title"></h2>
       <h3 id="artist"></h3>
       <audio src=""></audio>
+
       <!-- progress -->
       <div class="progress-container" id="progress-container">
-        <!-- this progress is the seek of the song, as the song goes -->
         <div class="progress" id="progress"></div>
         <div class="duration-wrapper">
           <span id="current-time">0:00</span>
           <span id="duration">6:27</span>
         </div>
       </div>
-      <!-- controls  -->
+
+      <!-- controls -->
       <div class="player-controls-wrapper">
         <div class="player-controls">
           <i class="fa-solid fa-backward" id="prev" title="Previous"></i>
           <i class="fa-solid fa-play main-button" id="play" title="Play"></i>
           <i class="fa-solid fa-forward" id="next" title="Next"></i>
+        </div>
       </div>
     </div>
+
     <!-- script -->
     <script src="./script.js"></script>
   </body>
