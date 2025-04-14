@@ -77,13 +77,17 @@ nav ul li a:hover {
   color: bisque;
   margin-top: 70px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+
+  /* NEW - Invisible top border effect */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0px, black 20px, black 100%);
+  mask-image: linear-gradient(to bottom, transparent 0px, black 20px, black 100%);
 }
 
 .img-container {
   height: 280px;
   width: 280px;
   position: relative;
-  top: -20px;
+  top: -20px; /* Original position */
   left: 30px;
   overflow: hidden;
   box-shadow: 0px 0px 45px rgba(255, 255, 255, 0.45); /* Strong white glow */
@@ -107,7 +111,7 @@ h2 {
   font-size: 25px;
   text-align: center;
   margin: 0;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8); /* Strong black glow around song title (unchanged) */
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8); /* Strong black glow around song title */
 }
 
 h3 {
