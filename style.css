@@ -107,7 +107,7 @@ h2 {
   font-size: 25px;
   text-align: center;
   margin: 0;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8); /* Stronger soft black glow */
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8); /* Strong black glow around song title (unchanged) */
 }
 
 h3 {
@@ -118,7 +118,7 @@ h3 {
   font-family: 'Inknut Antiqua', serif;
   margin-top: -10px;
   margin-bottom: -20px;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8); /* Stronger soft black glow */
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.85); /* Thicker black glow around artist name */
 }
 
 /* Progress */
@@ -153,7 +153,7 @@ h3 {
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top: 20px; /* Raise player controls halfway */
+  margin-top: 20px; /* Raised halfway back up */
 }
 
 .player-controls {
