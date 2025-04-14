@@ -66,14 +66,14 @@ nav ul li a:hover {
 }
 
 .player-container {
-  height: 500px; /* Normal player height */
-  width: 340px; /* Normal player width */
-  background: rgba(15, 15, 15, 0.3); /* Darker tone, more transparent */
-  backdrop-filter: none; /* No blur */
-  border-radius: 25px; /* Normal rounded corners */
+  height: 500px;
+  width: 340px;
+  background: rgba(15, 15, 15, 0.3);
+  backdrop-filter: none;
+  border-radius: 25px;
   box-shadow: 
-    0px 8px 20px rgba(0, 0, 0, 0.6), /* Black outer glow */
-    0px 0px 10px rgba(0, 0, 0, 0.5); /* Secondary black glow */
+    0px 8px 20px rgba(0, 0, 0, 0.6),
+    0px 0px 10px rgba(0, 0, 0, 0.5);
   color: bisque;
   margin-top: 70px;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -83,31 +83,33 @@ nav ul li a:hover {
   height: 280px;
   width: 280px;
   position: relative;
-  top: -20px; /* Original position */
+  top: -20px;
   left: 30px;
   overflow: hidden;
-  box-shadow: 0px 0px 45px rgba(255, 255, 255, 0.45); /* Strong white glow */
-  border-radius: 0px; /* Sharp corners */
+  box-shadow: 0px 0px 45px rgba(255, 255, 255, 0.45);
+  border-radius: 0px;
 }
 
 .img-container img {
   height: 100%;
   width: 100%;
   object-fit: cover;
-  border-radius: 0px; /* Sharp corners */
+  border-radius: 0px;
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .img-container img:hover {
   transform: scale(1.05);
-  box-shadow: 0px 0px 60px rgba(255, 255, 255, 0.6); /* Even stronger white glow on hover */
+  box-shadow: 0px 0px 60px rgba(255, 255, 255, 0.6);
 }
 
 h2 {
   font-size: 25px;
   text-align: center;
   margin: 0;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8); /* Strong black glow around song title */
+  text-shadow: 
+    0 0 10px rgba(0, 0, 0, 0.9), /* Strong tighter inner halo */
+    0 0 18px rgba(0, 0, 0, 0.7); /* Softer larger outer halo */
 }
 
 h3 {
@@ -118,7 +120,9 @@ h3 {
   font-family: 'Inknut Antiqua', serif;
   margin-top: -10px;
   margin-bottom: -20px;
-  text-shadow: 0 0 12px rgba(0, 0, 0, 0.85); /* Thicker black glow around artist name */
+  text-shadow: 
+    0 0 12px rgba(0, 0, 0, 0.95), /* Strong inner halo */
+    0 0 20px rgba(0, 0, 0, 0.75); /* Wider soft halo */
 }
 
 /* Progress */
@@ -126,7 +130,7 @@ h3 {
   background: rgba(255, 255, 255, 0.7);
   border-radius: 5px;
   cursor: pointer;
-  margin: 60px 20px 10px 20px; /* Lower the progress bar */
+  margin: 60px 20px 10px 20px;
   height: 3px;
   width: 90%;
 }
@@ -147,13 +151,12 @@ h3 {
   color: bisque;
 }
 
-/* Controls */
 .player-controls-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top: 20px; /* Raised halfway back up */
+  margin-top: 20px;
 }
 
 .player-controls {
