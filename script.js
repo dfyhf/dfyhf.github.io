@@ -7,6 +7,8 @@ const progress = document.getElementById('progress');
 const prevBtn = document.getElementById('prev');
 const playBtn = document.getElementById('play');
 const nextBtn = document.getElementById('next');
+const durationEl = document.getElementById('duration');
+const currentTimeEl = document.getElementById('current-time');
 
 // Music
 const songs = [
@@ -36,17 +38,7 @@ function pauseSong() {
   music.pause();
 }
 
-// Play or Pause Event Listener
-playBtn.addEventListener('click', () => {
-  if (isPlaying) {
-    pauseSong();
-  } else {
-    playSong();
-  }
-  setTimeout(() => playBtn.blur(), 100); // Fix mobile focus sticking
-});
-
-// Update DOM
+// Load Song
 function loadSong(song) {
   title.textContent = song.displayName;
   artist.textContent = song.artist;
@@ -77,9 +69,6 @@ function nextSong() {
   playSong();
 }
 
-// On Load - Select First Song
-loadSong(songs[songIndex]);
-
 // Update Progress Bar
 function updateProgressBar(e) {
   if (isPlaying) {
@@ -93,7 +82,6 @@ function updateProgressBar(e) {
     if (durationSeconds < 10) {
       durationSeconds = `0${durationSeconds}`;
     }
-    // Delay switching duration Element to avoid NaN
     if (durationSeconds) {
       durationEl.textContent = `${durationMinutes}:${durationSeconds}`;
     }
@@ -117,21 +105,28 @@ function setProgressBar(e) {
 }
 
 // Event Listeners
-music.addEventListener('timeupdate', updateProgressBar);
-music.addEventListener('ended', nextSong);
+playBtn.addEventListener('click', () => {
+  if (isPlaying) {
+    pauseSong();
+  } else {
+    playSong();
+  }
+  setTimeout(() => playBtn.blur(), 100); // Mobile-friendly blur
+});
 
 prevBtn.addEventListener('click', () => {
   prevSong();
-  setTimeout(() => prevBtn.blur(), 100); // Fix mobile focus sticking
+  setTimeout(() => prevBtn.blur(), 100); // Mobile-friendly blur
 });
 
 nextBtn.addEventListener('click', () => {
   nextSong();
-  setTimeout(() => nextBtn.blur(), 100); // Fix mobile focus sticking
+  setTimeout(() => nextBtn.blur(), 100); // Mobile-friendly blur
 });
 
+music.addEventListener('timeupdate', updateProgressBar);
+music.addEventListener('ended', nextSong);
 progressContainer.addEventListener('click', setProgressBar);
 
-// Elements for time display
-const durationEl = document.getElementById('duration');
-const currentTimeEl = document.getElementById('current-time');
+// Load the first song
+loadSong(songs[songIndex]);
