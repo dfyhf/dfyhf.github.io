@@ -66,21 +66,17 @@ nav ul li a:hover {
 }
 
 .player-container {
-  height: 500px;
-  width: 340px; /* Slimmer player */
+  height: 500px; /* Normal player height */
+  width: 340px; /* Normal player width */
   background: rgba(15, 15, 15, 0.3); /* Darker tone, more transparent */
   backdrop-filter: none; /* No blur */
-  border-radius: 25px;
+  border-radius: 25px; /* Normal rounded corners */
   box-shadow: 
     0px 8px 20px rgba(0, 0, 0, 0.6), /* Black outer glow */
     0px 0px 10px rgba(0, 0, 0, 0.5); /* Secondary black glow */
   color: bisque;
   margin-top: 70px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-
-  /* NEW - Invisible top border effect */
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0px, black 20px, black 100%);
-  mask-image: linear-gradient(to bottom, transparent 0px, black 20px, black 100%);
 }
 
 .img-container {
@@ -91,7 +87,7 @@ nav ul li a:hover {
   left: 30px;
   overflow: hidden;
   box-shadow: 0px 0px 45px rgba(255, 255, 255, 0.45); /* Strong white glow */
-  border-radius: 0px; /* No rounding */
+  border-radius: 0px; /* Sharp corners */
 }
 
 .img-container img {
