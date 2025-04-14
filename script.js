@@ -1,197 +1,164 @@
-@import url("https://fonts.googleapis.com/css2?family=Merriweather&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@700&display=swap");
+const image = document.querySelector("img");
+const title = document.getElementById("title");
+const artist = document.getElementById("artist");
 
-html {
-  box-sizing: border-box;
+const music = document.querySelector("audio");
+
+const progressContainer = document.getElementById("progress-container");
+const progress = document.getElementById("progress");
+
+const currentTimeEle = document.getElementById("current-time");
+const durationEle = document.getElementById("duration");
+
+const prevBtn = document.getElementById("prev");
+const playBtn = document.getElementById("play");
+const nextBtn = document.getElementById("next");
+
+// array of songs to insert
+const songs = [
+  {
+    name: "The Garden Path",
+    displayName: "The Garden Path",
+    artist: "iterations",
+  },
+  {
+    name: "Decades",
+    displayName: "Decades",
+    artist: "iterations",
+  },
+  {
+    name: "← ↑ Arrows ↓→",
+    displayName: "← ↑ Arrows ↓→",
+    artist: "iterations",
+  },
+  {
+    name: "Smoke-Filled Rooms",
+    displayName: "Smoke-Filled Rooms",
+    artist: "iterations",
+  },
+  {
+    name: "Passing Thoughts",
+    displayName: "Passing Thoughts",
+    artist: "iterations",
+  },
+  {
+    name: "Reorient",
+    displayName: "Reorient",
+    artist: "iterations",
+  },
+   {
+    name: "Recursion",
+    displayName: "Recursion",
+    artist: "iterations",
+  },
+   {
+    name: "The Weigh Out",
+    displayName: "The Weigh Out",
+    artist: "iterations",
+  },
+   {
+    name: "Permaculture",
+    displayName: "Permaculture",
+    artist: "iterations",
+  },
+];
+// boolean to check play or pause
+let isPlaying = false;
+
+// play function
+function playSong() {
+  isPlaying = true;
+  playBtn.classList.replace("fa-play", "fa-pause");
+  playBtn.setAttribute("title", "Pause");
+  music.play();
 }
 
-body {
-  position: relative;
-  margin: 0;
-  min-height: 100vh;
-  background-color: #5B5B5B;
-  font-family: "Merriweather", serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
+// pause function
+function pauseSong() {
+  isPlaying = false;
+  playBtn.classList.replace("fa-pause", "fa-play");
+  playBtn.setAttribute("title", "Play");
+  music.pause();
 }
 
-body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('./img/IMG_2917.jpg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: top right;
-  opacity: 0.60;
-  z-index: -1;
+// play or pause button event listener
+playBtn.addEventListener("click", () => (isPlaying ? pauseSong() : playSong()));
+
+// function that add songs in DOM elements
+function loadSong(song) {
+  title.textContent = song.displayName;
+  artist.textContent = song.artist;
+  music.src = `./music/${song.name}.mp3`;
+  image.src = `./img/${song.name}.jpg`;
+}
+    
+// current song update DOM
+let songIndex = 0;
+
+// previous song
+function prevSong() {
+  songIndex--;
+  if (songIndex < 0) {
+    songIndex = songs.length - 1;
+  }
+  loadSong(songs[songIndex]);
+  playSong();
+}
+// next song
+function nextSong() {
+  songIndex++;
+  if (songIndex > songs.length - 1) {
+    songIndex = 0;
+  }
+  loadSong(songs[songIndex]);
+  playSong();
 }
 
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50px;
-  background-color: #333 !important; /* Force solid grey */
-  z-index: 100;
-}
+// on loading first time, selecting first song
+loadSong(songs[songIndex]);
 
-nav ul {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  list-style-type: none;
-  margin: 0;
-  padding: 1rem;
-}
+// update progress bar and time
+function updateProgressBar(e) {
+  if (isPlaying) {
+    const { duration, currentTime } = e.srcElement;
+    // console.log(duration, currentTime);
+    // update progress bar width
+    const progressPercent = (currentTime / duration) * 100;
+    // console.log(progressPercent);
+    progress.style.width = `${progressPercent}%`;
+    // calculate display duration of song
+    const durationMinutes = Math.floor(duration / 60);
+    let durationSeconds = Math.floor(duration % 60);
+    if (durationSeconds < 10) {
+      durationSeconds = `0${durationSeconds}`;
+    }
 
-nav ul li {
-  margin: 0 1rem;
+    // delaying switching element duration to avoid NaN
+    if (durationSeconds) {
+      durationEle.textContent = `${durationMinutes}:${durationSeconds}`;
+    }
+    // calculate current display duration of song
+    const currentMinutes = Math.floor(currentTime / 60);
+    let currentSeconds = Math.floor(currentTime % 60);
+    if (currentSeconds < 10) {
+      currentSeconds = `0${currentSeconds}`;
+    }
+    currentTimeEle.textContent = `${currentMinutes}:${currentSeconds}`;
+  }
 }
-
-nav ul li a {
-  color: #fff;
-  text-decoration: none;
+// set progress bar function
+function setProgressBar(e) {
+  // console.log(e);
+  const width = this.clientWidth;
+  const clickValue = e.offsetX;
+  const { duration } = music;
+  music.currentTime = (clickValue / width) * duration;
 }
+// event listeners for buttons
+prevBtn.addEventListener("click", prevSong);
+nextBtn.addEventListener("click", nextSong);
 
-nav ul li a:hover {
-  text-decoration: underline;
-}
+music.addEventListener("timeupdate", updateProgressBar);
+progressContainer.addEventListener("click", setProgressBar);
 
-.player-container {
-  height: 500px;
-  width: 340px; /* Slimmer player */
-  background: rgba(15, 15, 15, 0.3); /* Darker tone, more transparent */
-  backdrop-filter: none; /* No blur */
-  border-radius: 25px;
-  box-shadow: 
-    0px 8px 20px rgba(0, 0, 0, 0.6), /* Black outer glow */
-    0px 0px 10px rgba(0, 0, 0, 0.5); /* Secondary black glow */
-  color: bisque;
-  margin-top: 70px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-
-  /* NEW - Invisible top border effect */
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0px, black 20px, black 100%);
-  mask-image: linear-gradient(to bottom, transparent 0px, black 20px, black 100%);
-}
-
-.img-container {
-  height: 280px;
-  width: 280px;
-  position: relative;
-  top: -20px; /* Original position */
-  left: 30px;
-  overflow: hidden;
-  box-shadow: 0px 0px 45px rgba(255, 255, 255, 0.45); /* Strong white glow */
-  border-radius: 0px; /* No rounding */
-}
-
-.img-container img {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  border-radius: 0px; /* Sharp corners */
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
-
-.img-container img:hover {
-  transform: scale(1.05);
-  box-shadow: 0px 0px 60px rgba(255, 255, 255, 0.6); /* Even stronger white glow on hover */
-}
-
-h2 {
-  font-size: 25px;
-  text-align: center;
-  margin: 0;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8); /* Strong black glow around song title */
-}
-
-h3 {
-  font-size: 24px;
-  text-align: center;
-  font-weight: 400;
-  margin: 5px 0 0;
-  font-family: 'Inknut Antiqua', serif;
-  margin-top: -10px;
-  margin-bottom: -20px;
-  text-shadow: 0 0 12px rgba(0, 0, 0, 0.85); /* Thicker black glow around artist name */
-}
-
-/* Progress */
-.progress-container {
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 60px 20px 10px 20px; /* Lower the progress bar */
-  height: 3px;
-  width: 90%;
-}
-
-.progress {
-  background: black;
-  border-radius: 5px;
-  height: 100%;
-  width: 0%;
-  transition: width 0.1s linear;
-}
-
-.duration-wrapper {
-  position: relative;
-  top: -25px;
-  display: flex;
-  justify-content: space-between;
-  color: bisque;
-}
-
-/* Controls */
-.player-controls-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin-top: 20px; /* Raised halfway back up */
-}
-
-.player-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.main-button {
-  font-size: 40px;
-  position: relative;
-  top: 0px;
-}
-
-.fa-solid {
-  font-size: 30px;
-  color: bisque;
-  margin: 0 15px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.fa-solid:hover {
-  filter: brightness(70%);
-}
-
-.brand {
-  font-family: 'Inknut Antiqua', serif;
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: bisque;
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  text-shadow: 0 0 2px black;
-}
+music.addEventListener("ended", nextSong);
