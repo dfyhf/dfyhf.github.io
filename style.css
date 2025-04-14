@@ -127,6 +127,7 @@ h2 {
     0 0 18px rgba(0, 0, 0, 0.7);
   animation: fadeIn 1s ease-in both;
   animation-delay: 0.5s;
+  -webkit-text-stroke: 0.5px black;
 }
 
 h3 {
@@ -142,6 +143,7 @@ h3 {
     0 0 20px rgba(0, 0, 0, 0.75);
   animation: fadeIn 1s ease-in both;
   animation-delay: 0.7s;
+  -webkit-text-stroke: 0.5px black;
 }
 
 /* Progress */
@@ -170,6 +172,11 @@ h3 {
   color: bisque;
 }
 
+#current-time, #duration {
+  -webkit-text-stroke: 0.4px black;
+}
+
+/* Controls */
 .player-controls-wrapper {
   display: flex;
   justify-content: center;
@@ -201,6 +208,7 @@ h3 {
   text-shadow: 
     0 0 6px rgba(0, 0, 0, 0.8),
     0 0 10px rgba(0, 0, 0, 0.6);
+  -webkit-text-stroke: 0.5px black;
 }
 
 .fa-solid:hover {
@@ -219,6 +227,7 @@ h3 {
   text-shadow: 
     0 0 8px rgba(0, 0, 0, 0.9),
     0 0 16px rgba(0, 0, 0, 0.6);
+  -webkit-text-stroke: 0.5px black;
 }
 
 /* Fade In Keyframes */
