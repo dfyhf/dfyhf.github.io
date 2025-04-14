@@ -24,7 +24,7 @@ const songs = [
   {
     name: "Decades",
     displayName: "Decades",
-    artist: "Iterations",
+    artist: "iterations",
   },
   {
     name: "← ↑ Arrows ↓→",
