@@ -110,20 +110,21 @@ nav ul li a:hover {
   width: 100%;
   object-fit: cover;
   border-radius: 0px;
-  transition: box-shadow 0.4s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .img-container img:hover {
-  box-shadow: 
-    0 0 60px rgba(255, 255, 255, 0.5),
-    0 0 80px rgba(255, 255, 255, 0.4); /* Soft glow without zoom */
+  transform: scale(1.05);
+  box-shadow: 0px 0px 60px rgba(255, 255, 255, 0.6);
 }
 
 h2 {
   font-size: 25px;
   text-align: center;
   margin: 0;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8); /* Soft glow only, no stroke */
+  text-shadow: 
+    0 0 10px rgba(0, 0, 0, 0.9),
+    0 0 18px rgba(0, 0, 0, 0.7);
   animation: fadeIn 1s ease-in both;
   animation-delay: 0.5s;
 }
@@ -141,7 +142,6 @@ h3 {
     0 0 20px rgba(0, 0, 0, 0.75);
   animation: fadeIn 1s ease-in both;
   animation-delay: 0.7s;
-  -webkit-text-stroke: 0.5px black;
 }
 
 /* Progress */
@@ -170,11 +170,6 @@ h3 {
   color: bisque;
 }
 
-#current-time, #duration {
-  -webkit-text-stroke: 0.4px black;
-}
-
-/* Controls */
 .player-controls-wrapper {
   display: flex;
   justify-content: center;
@@ -206,7 +201,6 @@ h3 {
   text-shadow: 
     0 0 6px rgba(0, 0, 0, 0.8),
     0 0 10px rgba(0, 0, 0, 0.6);
-  -webkit-text-stroke: 0.5px black;
 }
 
 .fa-solid:hover {
@@ -225,7 +219,6 @@ h3 {
   text-shadow: 
     0 0 8px rgba(0, 0, 0, 0.9),
     0 0 16px rgba(0, 0, 0, 0.6);
-  -webkit-text-stroke: 0.5px black;
 }
 
 /* Fade In Keyframes */
