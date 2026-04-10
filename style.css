@@ -1,0 +1,964 @@
+@import url("https://fonts.googleapis.com/css2?family=Merriweather&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@700&display=swap");
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  position: relative;
+  margin: 0;
+  min-height: 100vh;
+  background-color: #5B5B5B;
+  font-family: "Merriweather", serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 72px 16px 24px;
+  font-size: 14px;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+  background-image: url("/img/IMG_2917.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top right;
+  opacity: 0.6;
+  z-index: -1;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: linear-gradient(
+    to right,
+    rgba(51, 51, 51, 1) 0%,
+    rgba(51, 51, 51, 0.95) 10%,
+    rgba(51, 51, 51, 0.9) 20%,
+    rgba(51, 51, 51, 0.8) 30%,
+    rgba(51, 51, 51, 0.6) 40%,
+    rgba(51, 51, 51, 0.4) 50%,
+    rgba(51, 51, 51, 0.25) 60%,
+    rgba(51, 51, 51, 0.15) 70%,
+    rgba(51, 51, 51, 0.05) 80%,
+    rgba(51, 51, 51, 0) 90%
+  );
+  z-index: 100;
+}
+
+nav ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 1rem;
+}
+
+nav ul li {
+  margin: 0 1rem;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+nav ul li a:hover {
+  text-decoration: underline;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.player-shell {
+  container-type: inline-size;
+  container-name: player;
+  /* Desktop: stay at max layout width until viewport + padding require shrink; background crops via cover */
+  width: min(688px, 100%);
+  max-width: 100%;
+  background: rgba(15, 15, 15, 0.42);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.55),
+    0 0 1px rgba(255, 255, 255, 0.06) inset;
+  color: bisque;
+  overflow: hidden;
+  animation: fadeIn 1s ease-in both;
+  box-sizing: border-box;
+}
+
+/* Pick mode: cover art only — no gradient scrim over the image */
+.player-shell--pick-mode .player-main {
+  background-color: #1a1816;
+  background-image: url("/img/the-garden-path-player-bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.player-main--pick-mode #player-transport,
+.player-main--pick-mode #player-download-row {
+  display: none !important;
+}
+
+.player-main--pick-mode .player-chrome[hidden] {
+  display: none !important;
+}
+
+#player-chrome[hidden],
+#player-transport[hidden],
+#player-download-row[hidden] {
+  display: none !important;
+}
+
+.player-shell-inner {
+  display: grid;
+  grid-template-columns: minmax(168px, 256px) minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  align-items: stretch;
+  gap: 0;
+  min-height: 460px;
+  min-width: 0;
+}
+
+.player-blade {
+  display: flex;
+  flex-direction: column;
+  background: rgba(8, 8, 8, 0.55);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.player-blade--tracks.playlist-suite {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Wide card: title bar is not a drawer toggle except when past pick mode (then it goes home). */
+@container player (min-width: 441px) {
+  .playlist-toggle {
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .player-shell:not(.player-shell--pick-mode) .playlist-toggle {
+    pointer-events: auto;
+    cursor: pointer;
+  }
+}
+
+.playlist-back-arrow {
+  display: block;
+  opacity: 0.72;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 228, 196, 0.7);
+  text-shadow: none;
+  line-height: 1;
+}
+
+.playlist-album-title--with-back {
+  position: relative;
+  display: block;
+  padding-left: 1.1rem;
+  padding-right: 0.35rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.playlist-album-title--with-back .playlist-back-arrow {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.playlist-album-title-text {
+  display: block;
+  overflow: visible;
+  text-overflow: clip;
+  font: inherit;
+  color: inherit;
+  text-shadow: inherit;
+  -webkit-text-stroke: inherit;
+}
+
+.playlist-toggle .playlist-album-title--with-back {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.playlist-header {
+  container-type: inline-size;
+  container-name: playlistHead;
+  flex-shrink: 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.playlist-toggle {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 16px 14px 14px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.playlist-toggle:focus-visible {
+  outline: 1px solid rgba(255, 228, 196, 0.45);
+  outline-offset: 3px;
+}
+
+/* Match `.brand` styling; ~19% under 1.5rem cap; scales with playlist column (cqi); no ellipsis */
+.playlist-album-title {
+  font-family: "Inknut Antiqua", serif;
+  font-size: max(0.58rem, min(calc(1.5rem * 0.81), calc(0.45rem + 5.85cqi)));
+  font-weight: 700;
+  letter-spacing: normal;
+  line-height: 1.2;
+  margin: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  color: bisque;
+  text-shadow:
+    0 0 8px rgba(0, 0, 0, 0.9),
+    0 0 16px rgba(0, 0, 0, 0.6);
+  -webkit-text-stroke: 0.5px black;
+}
+
+.playlist-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+.player-shell--pick-mode .playlist-body {
+  justify-content: stretch;
+  align-items: stretch;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.player-shell--pick-mode .playlist {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  gap: 0;
+}
+
+.player-shell--pick-mode .playlist > li {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  width: min(11rem, calc(100% - 8px));
+  max-width: 100%;
+  aspect-ratio: 2 / 1;
+  min-height: 0;
+}
+
+.playlist {
+  list-style: none;
+  margin: 0;
+  padding: 12px 0;
+  overflow: visible;
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+.playlist-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  line-height: 1.35;
+  border-left: 3px solid transparent;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+.playlist-item-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.playlist-item-duration {
+  flex: 0 0 auto;
+  opacity: 0.75;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+/* Versions top-level: folder rows (name + subline), not a flat timed playlist */
+.playlist-item--versions-index {
+  align-items: flex-start;
+}
+
+.playlist-item-versions-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.playlist-item--versions-index .playlist-item-versions-label .playlist-item-name {
+  white-space: normal;
+}
+
+.playlist-item-versions-cue {
+  flex: 0 0 auto;
+  opacity: 0.72;
+  font-size: 1.35rem;
+  font-weight: 300;
+  line-height: 1.1;
+  padding-top: 2px;
+  pointer-events: none;
+}
+
+/* Desktop-only: hide durations on narrow/mobile layout */
+@container player (max-width: 440px) {
+  .playlist-item-duration {
+    display: none;
+  }
+}
+
+.playlist-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.playlist-item.is-active {
+  background: rgba(255, 228, 196, 0.1);
+  border-left-color: bisque;
+}
+
+.playlist-item.playlist-item--disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.playlist-item.playlist-item--disabled:hover {
+  background: transparent;
+}
+
+.player-main {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 24px 20px;
+  gap: 8px;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  border-right: none;
+  background-color: #3d3428;
+  background-image:
+    linear-gradient(
+      160deg,
+      rgba(12, 11, 14, 0.42) 0%,
+      rgba(10, 9, 12, 0.32) 40%,
+      rgba(8, 8, 10, 0.38) 72%,
+      rgba(6, 6, 8, 0.48) 100%
+    ),
+    url("/img/the-garden-path-player-bg.png");
+  /* Lighter scrim so the photo reads; text leans on existing shadows */
+  background-size: 100% 100%, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    inset 0 0 72px rgba(0, 0, 0, 0.35);
+}
+
+.player-main > * {
+  position: relative;
+  z-index: 1;
+}
+
+.player-main--pick-mode .player-stack {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.player-main--pick-mode .player-main-focus {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* Mode choice: full-width only inside its list row; pick mode caps row width (see above) */
+button.playlist-item.playlist-item--mode {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: inherit;
+  width: 100%;
+  margin: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.playlist-item--mode:focus-visible {
+  outline: 2px solid rgba(255, 228, 196, 0.5);
+  outline-offset: -2px;
+}
+
+/* Pick mode: wide tiles, half the former square height; tint matches blade */
+.player-shell--pick-mode button.playlist-item.playlist-item--mode {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  padding: 7px 11px;
+  line-height: 1.22;
+}
+
+.player-shell--pick-mode button.playlist-item.playlist-item--mode:hover {
+  background: rgba(255, 255, 255, 0.088);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.player-shell--pick-mode .playlist-item-mode-spacer {
+  display: none;
+}
+
+.player-shell--pick-mode .playlist-item-mode-label {
+  align-items: center;
+  text-align: center;
+  max-width: 100%;
+  gap: 0.4rem;
+}
+
+.player-shell--pick-mode .playlist-item-name {
+  white-space: normal;
+  text-align: center;
+  font-size: 0.82rem;
+  line-height: 1.2;
+}
+
+.player-shell--pick-mode .playlist-item-subline {
+  text-align: center;
+  max-width: none;
+  font-size: 0.7rem;
+  line-height: 1.28;
+}
+
+.playlist-item-mode-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+}
+
+.playlist-item-subline {
+  font-family: "Merriweather", serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  line-height: 1.3;
+  opacity: 0.8;
+  white-space: normal;
+}
+
+.playlist-item-mode-spacer {
+  flex: 0 0 auto;
+  min-width: 2ch;
+  visibility: hidden;
+}
+
+.player-main > .download-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  flex: 0 0 auto;
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+.player-stack {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
+  min-height: 0;
+  gap: 14px;
+}
+
+.player-main-focus {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0;
+}
+
+.player-main-focus #audio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.now-playing--simple {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0;
+  padding: 0;
+  flex: 0 0 auto;
+  width: 100%;
+  margin-inline: auto;
+}
+
+.now-playing--simple .track-title,
+.now-playing--simple .track-artist {
+  width: 100%;
+  max-width: 32ch;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.track-title {
+  font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+  margin: 0 auto 6px;
+  line-height: 1.2;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.85),
+    0 0 12px rgba(0, 0, 0, 0.9),
+    0 0 22px rgba(0, 0, 0, 0.75);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.track-artist {
+  margin: 0 auto;
+  font-family: "Inknut Antiqua", serif;
+  font-size: 1.05rem;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.9),
+    0 0 14px rgba(0, 0, 0, 0.95),
+    0 0 24px rgba(0, 0, 0, 0.8);
+}
+
+.transport {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  margin-top: 0;
+  gap: 3px;
+  min-height: 0;
+}
+
+.player-main .download-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(255, 228, 196, 0.1);
+  border: 1px solid rgba(255, 228, 196, 0.28);
+  color: bisque;
+  text-decoration: none;
+  font-size: 0.72rem;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.55);
+}
+
+.player-main .download-link .fa-solid {
+  font-size: 0.7rem;
+}
+
+.player-main .download-link:hover {
+  background: rgba(255, 228, 196, 0.18);
+  border-color: rgba(255, 228, 196, 0.42);
+}
+
+.progress-container {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+  cursor: pointer;
+  height: 5px;
+  width: 100%;
+  outline: none;
+}
+
+.progress-container:focus-visible {
+  box-shadow: 0 0 0 2px rgba(255, 228, 196, 0.55);
+}
+
+.progress {
+  background: bisque;
+  border-radius: 4px;
+  height: 100%;
+  width: 0%;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 12px rgba(255, 228, 196, 0.35);
+}
+
+.duration-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  margin-top: 1px;
+}
+
+#current-time,
+#duration {
+  color: bisque;
+  text-shadow:
+    0 0 12px rgba(0, 0, 0, 0.95),
+    0 0 20px rgba(0, 0, 0, 0.75);
+}
+
+.player-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding-top: 2px;
+}
+
+.ctrl-btn {
+  appearance: none;
+  margin: 0;
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: bisque;
+  border-radius: 10px;
+  transition: background 0.15s ease;
+}
+
+.ctrl-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ctrl-btn:focus-visible {
+  outline: 2px solid rgba(255, 228, 196, 0.6);
+  outline-offset: 2px;
+}
+
+.ctrl-btn .fa-solid {
+  font-size: 22px;
+  text-shadow:
+    0 0 6px rgba(0, 0, 0, 0.8),
+    0 0 10px rgba(0, 0, 0, 0.6);
+  -webkit-text-stroke: 0.5px black;
+  pointer-events: none;
+}
+
+.ctrl-main .fa-solid {
+  font-size: 30px;
+}
+
+/*
+ * Narrow card: album title (toggle) → player → track list.
+ * `display: contents` on .playlist-suite lifts header + body as grid items so we can reorder.
+ */
+@container player (max-width: 440px) {
+  .player-shell-inner {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto minmax(140px, auto);
+    min-height: 0;
+    gap: 0;
+    background: rgba(8, 8, 8, 0.55);
+  }
+
+  /* No third row until playlist is opened — avoids empty minmax(140px) gap */
+  .player-shell:not(.playlist-expanded) .player-shell-inner {
+    grid-template-rows: auto auto;
+  }
+
+  /* Pick mode: header → mode list → player hero (list always visible; no drawer toggle) */
+  .player-shell--pick-mode .player-shell-inner {
+    grid-template-rows: auto auto minmax(180px, 42vmin);
+  }
+
+  .player-shell--pick-mode:not(.playlist-expanded) .player-shell-inner {
+    grid-template-rows: auto auto minmax(180px, 42vmin);
+  }
+
+  .player-shell--pick-mode .playlist-body {
+    display: flex !important;
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  .player-shell--pick-mode .player-main {
+    grid-row: 3;
+    grid-column: 1;
+    aspect-ratio: unset;
+    min-height: 140px;
+  }
+
+  .player-blade--tracks.playlist-suite {
+    display: contents;
+  }
+
+  .playlist-header {
+    grid-column: 1;
+    grid-row: 1;
+    background: rgba(8, 8, 8, 0.55);
+  }
+
+  .player-main {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
+    min-height: 0;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-bottom: none;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+      inset 0 0 48px rgba(0, 0, 0, 0.3);
+    padding: 12px 14px 10px;
+  }
+
+  .player-main .player-stack {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .playlist-body {
+    grid-column: 1;
+    grid-row: 3;
+    background: rgba(8, 8, 8, 0.55);
+    border-right: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    margin-top: -1px;
+    padding-top: 1px;
+    justify-content: flex-start;
+    padding-bottom: 10px;
+    display: none;
+  }
+
+  .player-shell.playlist-expanded .playlist-body {
+    display: flex;
+  }
+
+  .playlist-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    padding: 0 14px;
+    pointer-events: auto;
+  }
+
+  .player-blade {
+    border-right: none;
+  }
+}
+
+/* Browsers without container queries */
+@supports not (container-type: inline-size) {
+  @media (max-width: 520px) {
+    .player-shell-inner {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto minmax(140px, auto);
+      min-height: 0;
+      gap: 0;
+      background: rgba(8, 8, 8, 0.55);
+    }
+
+    .player-shell:not(.playlist-expanded) .player-shell-inner {
+      grid-template-rows: auto auto;
+    }
+
+    .player-shell--pick-mode .player-shell-inner {
+      grid-template-rows: auto auto minmax(180px, 42vmin);
+    }
+
+    .player-shell--pick-mode:not(.playlist-expanded) .player-shell-inner {
+      grid-template-rows: auto auto minmax(180px, 42vmin);
+    }
+
+    .player-shell--pick-mode .playlist-body {
+      display: flex !important;
+      grid-row: 2;
+      grid-column: 1;
+    }
+
+    .player-shell--pick-mode .player-main {
+      grid-row: 3;
+      grid-column: 1;
+      aspect-ratio: unset;
+      min-height: 140px;
+    }
+
+    .player-blade--tracks.playlist-suite {
+      display: contents;
+    }
+
+    .playlist-header {
+      grid-column: 1;
+      grid-row: 1;
+      background: rgba(8, 8, 8, 0.55);
+    }
+
+    .player-main {
+      grid-column: 1;
+      grid-row: 2;
+      width: 100%;
+      max-width: 100%;
+      aspect-ratio: 1 / 1;
+      min-height: 0;
+      height: auto;
+      overflow-x: hidden;
+      overflow-y: auto;
+      border-bottom: none;
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+        inset 0 0 48px rgba(0, 0, 0, 0.3);
+      padding: 12px 14px 10px;
+    }
+
+    .player-main .player-stack {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .playlist-body {
+      grid-column: 1;
+      grid-row: 3;
+      background: rgba(8, 8, 8, 0.55);
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      margin-top: -1px;
+      padding-top: 1px;
+      justify-content: flex-start;
+      padding-bottom: 10px;
+      display: none;
+    }
+
+    .player-shell.playlist-expanded .playlist-body {
+      display: flex;
+    }
+
+    .playlist-toggle {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 0 14px;
+      pointer-events: auto;
+    }
+
+    .player-blade {
+      border-right: none;
+    }
+  }
+}
+
+.brand {
+  font-family: 'Inknut Antiqua', serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: bisque;
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  text-shadow: 
+    0 0 8px rgba(0, 0, 0, 0.9),
+    0 0 16px rgba(0, 0, 0, 0.6);
+  -webkit-text-stroke: 0.5px black;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}

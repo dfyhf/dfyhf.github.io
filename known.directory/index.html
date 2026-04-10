@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Known.Directory</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Recursive:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: #7f8c8d;
+            font-family: 'Montserrat', sans-serif; /* Default font */
+            position: relative; /* Required for absolute positioning */
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.33); /* Semi-transparent black layer */
+            z-index: 1; /* Ensure the overlay appears above other content */
+        }
+        .container {
+            text-align: center;
+            z-index: 2; /* Ensure the content appears above the overlay */
+            margin-top: -30vh; /* Adjusted to raise content higher */
+        }
+        h1 {
+            font-size: 5rem;
+            font-weight: 700; /* Make the font bold */
+            margin: 0;
+            padding: 20px;
+            border: 5px solid #7f8c8d;
+            border-radius: 10px;
+        }
+        h1 .highlight {
+            font-family: 'Recursive', sans-serif; /* Apply Recursive font */
+        }
+        p {
+            font-size: 3rem;
+            margin-top: 20px;
+        }
+        p .highlight {
+            font-family: 'Recursive', sans-serif; /* Apply Recursive font */
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="container">
+        <h1><span class="highlight">Known</span>.Directory/</h1>
+        <p>Who Do You <span class="highlight">Trust?</span></p>
+    </div>
+</body>
+</html>

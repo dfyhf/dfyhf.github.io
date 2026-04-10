@@ -1,0 +1,11 @@
+globalThis.__ITERATION_2_MANIFEST__ = {
+  "01-the-garden-path": "01 The Garden Path.mp3",
+  "02-decades": "02 Decades.mp3",
+  "03-arrows": "03 ← ↑ Arrows ↓→.mp3",
+  "04-smoke-filled-rooms": "04 Smoke-Filled Rooms.mp3",
+  "05-passing-thoughts": "05 Passing Thoughts.mp3",
+  "06-reorient": "06 Reorient.mp3",
+  "07-recursion": "07 Recursion.mp3",
+  "08-the-weighout": "08 The Weigh Out.mp3",
+  "09-permaculture": "09 (permaculture).mp3"
+};

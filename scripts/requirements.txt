@@ -1,0 +1,3 @@
+mutagen>=1.47.0
+
+# Optional: ffmpeg for audio tooling —  nix profile add nixpkgs#ffmpeg

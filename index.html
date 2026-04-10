@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>iterations.band</title>
+    <meta
+      name="description"
+      content="Iterations is a band located in Asheville, NC and Boulder, CO."
+    />
+    <link rel="canonical" href="https://iterations.band/" />
+
+    <meta property="og:title" content="The Garden Path" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://iterations.band/" />
+    <meta
+      property="og:image"
+      content="https://iterations.band/img/Clean.jpg"
+    />
+    <meta
+      property="og:image:secure_url"
+      content="https://iterations.band/img/Clean.jpg"
+    />
+    <meta property="og:image:type" content="image/jpg" />
+    <meta property="og:site_name" content="iterations.band/" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="iterations.band/" />
+    <meta
+      name="twitter:description"
+      content="Post-Psych/Groove-Grunge"
+    />
+    <meta
+      name="twitter:image"
+      content="https://iterations.band/img/TGP.png"
+    />
+
+    <link rel="icon" type="image/png" href="/img/TGP.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/style.css?v=35" />
+
+    <style>
+      body {
+        opacity: 0;
+        animation: fadeIn 1s ease-in forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header style="background-color: rgba(51, 51, 51, 0.8)">
+      <div class="brand">iterations</div>
+      <nav>
+        <ul></ul>
+      </nav>
+    </header>
+
+    <div class="player-shell player-shell--pick-mode">
+      <div class="player-shell-inner">
+      <aside
+        class="player-blade player-blade--tracks playlist-suite"
+        aria-label="The Garden Path — track list"
+      >
+        <div class="playlist-header">
+          <button
+            type="button"
+            class="playlist-toggle"
+            id="playlist-toggle"
+            aria-expanded="false"
+            aria-controls="playlist-panel"
+          >
+            <span class="playlist-album-title">The Garden Path</span>
+          </button>
+        </div>
+
+        <div class="playlist-body" id="playlist-panel">
+          <ul class="playlist" id="playlist" role="list"></ul>
+        </div>
+      </aside>
+
+      <div class="player-main player-main--pick-mode" id="player-main">
+        <div class="player-stack">
+          <div class="player-main-focus">
+            <div class="player-chrome" id="player-chrome" hidden>
+              <div class="now-playing now-playing--simple">
+                <h2 class="track-title" id="title"></h2>
+                <p class="track-artist" id="artist"></p>
+              </div>
+
+              <audio id="audio" preload="metadata" playsinline></audio>
+            </div>
+          </div>
+
+          <div class="transport" id="player-transport" hidden>
+            <div
+              class="progress-container"
+              id="progress-container"
+              role="slider"
+              aria-label="Seek"
+              tabindex="0"
+            >
+              <div class="progress" id="progress"></div>
+            </div>
+            <div class="duration-wrapper">
+              <span id="current-time">0:00</span>
+              <span id="duration">0:00</span>
+            </div>
+
+            <div class="player-controls">
+              <button type="button" class="ctrl-btn" id="prev" title="Previous">
+                <i class="fa-solid fa-backward" aria-hidden="true"></i>
+                <span class="sr-only">Previous track</span>
+              </button>
+              <button type="button" class="ctrl-btn ctrl-main" id="play" title="Play">
+                <i class="fa-solid fa-play" aria-hidden="true"></i>
+                <span class="sr-only">Play</span>
+              </button>
+              <button type="button" class="ctrl-btn" id="next" title="Next">
+                <i class="fa-solid fa-forward" aria-hidden="true"></i>
+                <span class="sr-only">Next track</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="download-row" id="player-download-row" hidden>
+          <a
+            class="download-link"
+            id="download-mp3"
+            href="#"
+            download
+          >
+            <i class="fa-solid fa-download" aria-hidden="true"></i>
+            Download MP3
+          </a>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <script src="/music/iteration-2/files.inline.js?v=1"></script>
+    <script src="/script.js?v=42"></script>
+  </body>
+</html>
