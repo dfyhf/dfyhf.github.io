@@ -212,71 +212,14 @@ nav ul li a:hover {
   }
 
   /*
-   * Wide pick: same stacked hero + tiles centered on the image as narrow.
-   * Without this, mode buttons stay in the left blade (see layout metrics: ul.cx << main.cx).
+   * Desktop pick (shell ≥441px): keep the default two-column .player-shell-inner layout —
+   * mode tiles stay in the left blade; hero fills the right column. (Stacked overlay is
+   * only under @container player (max-width: 440px).)
    */
-  .player-shell--pick-mode .player-shell-inner {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    min-height: 0;
-    gap: 0;
-    background: rgba(8, 8, 8, 0.55);
-  }
-
-  .player-shell--pick-mode .player-blade--tracks.playlist-suite {
-    display: contents;
-  }
-
-  .player-shell--pick-mode .playlist-header {
-    grid-column: 1;
-    grid-row: 1;
-    background: rgba(8, 8, 8, 0.55);
-  }
-
-  .player-shell--pick-mode .playlist-body {
-    display: flex !important;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: center;
-    flex: none;
-    grid-row: 2;
-    grid-column: 1;
-    z-index: 2;
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    min-height: 0;
-    padding: 0;
-    margin: 0;
-    background: transparent;
-    border-top: none;
-    overflow: hidden;
-    -webkit-overflow-scrolling: touch;
-  }
-
   .player-shell--pick-mode .player-main {
-    grid-row: 2;
-    grid-column: 1;
-    z-index: 0;
-    position: relative;
-    isolation: isolate;
-    justify-self: stretch;
-    align-self: stretch;
-    width: 100%;
-    max-width: 100%;
-    aspect-ratio: 4 / 3;
-    max-height: none;
-    min-height: 0;
-    height: auto;
-    overflow: hidden;
     padding: 0;
-  }
-
-  .player-shell--pick-mode .player-main > * {
-    z-index: 0;
+    gap: 0;
+    overflow: hidden;
   }
 
   .player-shell--pick-mode .playlist {
@@ -1408,70 +1351,12 @@ button.playlist-item.playlist-item--mode {
     }
   }
 
-  /* No container queries: approximate “wide pick” when viewport (and thus shell) is wide */
+  /* No container queries: wide viewport uses same two-column pick landing as container-query path */
   @media (min-width: 521px) {
-    .player-shell--pick-mode .player-shell-inner {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto auto;
-      min-height: 0;
-      gap: 0;
-      background: rgba(8, 8, 8, 0.55);
-    }
-
-    .player-shell--pick-mode .player-blade--tracks.playlist-suite {
-      display: contents;
-    }
-
-    .player-shell--pick-mode .playlist-header {
-      grid-column: 1;
-      grid-row: 1;
-      background: rgba(8, 8, 8, 0.55);
-    }
-
-    .player-shell--pick-mode .playlist-body {
-      display: flex !important;
-      flex-direction: column;
-      flex-wrap: nowrap;
-      align-items: center;
-      justify-content: center;
-      flex: none;
-      grid-row: 2;
-      grid-column: 1;
-      z-index: 1;
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      box-sizing: border-box;
-      min-height: 0;
-      padding: 0;
-      margin: 0;
-      background: transparent;
-      border-top: none;
-      overflow: hidden;
-      -webkit-overflow-scrolling: touch;
-    }
-
     .player-shell--pick-mode .player-main {
-      grid-row: 2;
-      grid-column: 1;
-      z-index: 0;
-      position: relative;
-      isolation: isolate;
-      justify-self: stretch;
-      align-self: stretch;
-      width: 100%;
-      max-width: 100%;
-      aspect-ratio: 4 / 3;
-      max-height: none;
-      min-height: 0;
-      height: auto;
-      overflow: hidden;
       padding: 0;
-    }
-
-    .player-shell--pick-mode .player-main > * {
-      z-index: 0;
+      gap: 0;
+      overflow: hidden;
     }
 
     .player-shell--pick-mode .playlist {
