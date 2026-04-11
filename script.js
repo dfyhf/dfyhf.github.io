@@ -1230,6 +1230,37 @@ function syncPlaylistDrawer() {
 
   const narrow = playerShellContentInlineSize(playerShell) <= NARROW_SHELL_PX;
 
+  // #region agent log
+  {
+    const sh = playerShell.getBoundingClientRect().height;
+    const ih =
+      playerShell.querySelector(".player-shell-inner")?.getBoundingClientRect().height ?? 0;
+    fetch("http://127.0.0.1:7626/ingest/fcca8389-a788-4691-a60a-d529e0a47596", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "b5d82f" },
+      body: JSON.stringify({
+        sessionId: "b5d82f",
+        runId: "viewport-card",
+        hypothesisId: "H5",
+        location: "script.js:syncPlaylistDrawer",
+        message: "drawer sync",
+        data: {
+          mode,
+          narrow,
+          playlistExpanded: playerShell.classList.contains("playlist-expanded"),
+          panelParentId: playlistPanel.parentElement?.id || null,
+          vpH: typeof window !== "undefined" ? Math.round(window.innerHeight) : null,
+          shellH: Math.round(sh),
+          innerH: Math.round(ih),
+          shellMaxH: getComputedStyle(playerShell).maxHeight,
+          shellOverflow: getComputedStyle(playerShell).overflow,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+  }
+  // #endregion
+
   if (mode === null && narrow) {
     playlistToggle.setAttribute("aria-expanded", "true");
     syncPickPlaylistPanelSlot();
@@ -1258,7 +1289,30 @@ function syncPickPlaylistPanelSlot() {
   if (!playerShell || !playlistPanel || !playerMainEl) return;
   const suite = playerShell.querySelector(".playlist-suite");
   const header = suite?.querySelector(".playlist-header");
-  if (!suite || !header) return;
+  if (!suite || !header) {
+    // #region agent log
+    fetch("http://127.0.0.1:7626/ingest/fcca8389-a788-4691-a60a-d529e0a47596", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "b5d82f" },
+      body: JSON.stringify({
+        sessionId: "b5d82f",
+        runId: "pre-fix",
+        hypothesisId: "H4",
+        location: "script.js:syncPickPlaylistPanelSlot",
+        message: "early return: missing suite or header",
+        data: {
+          hasSuite: !!suite,
+          hasHeader: !!header,
+          mode,
+          panelParentId: playlistPanel.parentElement?.id || null,
+          panelInMain: playlistPanel.parentElement === playerMainEl,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
+    return;
+  }
 
   const narrow = playerShellContentInlineSize(playerShell) <= NARROW_SHELL_PX;
   const pick = mode === null;
@@ -1267,12 +1321,69 @@ function syncPickPlaylistPanelSlot() {
     if (playlistPanel.parentElement !== playerMainEl) {
       playerMainEl.appendChild(playlistPanel);
     }
+    // #region agent log
+    {
+      const cs = getComputedStyle(playerMainEl);
+      const r = playerMainEl.getBoundingClientRect();
+      fetch("http://127.0.0.1:7626/ingest/fcca8389-a788-4691-a60a-d529e0a47596", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "b5d82f" },
+        body: JSON.stringify({
+          sessionId: "b5d82f",
+          runId: "pre-fix",
+          hypothesisId: "H1",
+          location: "script.js:syncPickPlaylistPanelSlot",
+          message: "after pick+narrow branch",
+          data: {
+            mode,
+            pick,
+            narrow,
+            panelParentId: playlistPanel.parentElement?.id || null,
+            shellPickClass: playerShell.classList.contains("player-shell--pick-mode"),
+            aspectRatio: cs.aspectRatio,
+            mainW: Math.round(r.width),
+            mainH: Math.round(r.height),
+          },
+          timestamp: Date.now(),
+        }),
+      }).catch(() => {});
+    }
+    // #endregion
     return;
   }
 
   if (playlistPanel.parentElement === playerMainEl) {
     header.insertAdjacentElement("afterend", playlistPanel);
   }
+  // #region agent log
+  {
+    const cs = getComputedStyle(playerMainEl);
+    const r = playerMainEl.getBoundingClientRect();
+    fetch("http://127.0.0.1:7626/ingest/fcca8389-a788-4691-a60a-d529e0a47596", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "b5d82f" },
+      body: JSON.stringify({
+        sessionId: "b5d82f",
+        runId: "pre-fix",
+        hypothesisId: "H1",
+        location: "script.js:syncPickPlaylistPanelSlot",
+        message: "after restore / non-pick path",
+        data: {
+          mode,
+          pick,
+          narrow,
+          panelParentId: playlistPanel.parentElement?.id || null,
+          panelInMainWhileListening: mode !== null && playlistPanel.parentElement === playerMainEl,
+          shellPickClass: playerShell.classList.contains("player-shell--pick-mode"),
+          aspectRatio: cs.aspectRatio,
+          mainW: Math.round(r.width),
+          mainH: Math.round(r.height),
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+  }
+  // #endregion
 }
 
 if (playerShell && playlistToggle && playlistPanel) {
