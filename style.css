@@ -151,12 +151,12 @@ nav ul li a:hover {
 /* After .player-shell-inner so min-height: 0 wins over desktop min-height: 460px. */
 @media (max-width: 520px) {
   body {
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding-top: calc(50px + env(safe-area-inset-top, 0px) + 8px);
+    align-items: center;
+    justify-content: center;
+    padding-top: calc(50px + env(safe-area-inset-top, 0px) + 12px);
     padding-right: 0;
     padding-left: 0;
-    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   }
 
   .player-shell {
@@ -840,15 +840,32 @@ button.playlist-item.playlist-item--mode {
     grid-column: 1;
     z-index: 0;
     position: relative;
-    align-self: stretch;
-    aspect-ratio: unset;
+    align-self: center;
+    justify-self: center;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: min(100%, 100cqw);
     min-height: 0;
-    max-height: none;
-    height: 100%;
+    height: auto;
   }
 
   .player-shell--pick-mode .player-main > * {
     z-index: 0;
+  }
+
+  /* Readable tiles on bright hero — dark translucent cards (narrow pick only) */
+  .player-shell--pick-mode button.playlist-item.playlist-item--mode {
+    background: rgba(6, 6, 6, 0.68);
+    border-color: rgba(255, 255, 255, 0.22);
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  }
+
+  .player-shell--pick-mode button.playlist-item.playlist-item--mode:hover {
+    background: rgba(14, 14, 14, 0.78);
+    border-color: rgba(255, 255, 255, 0.28);
   }
 
   .player-shell--pick-mode .playlist {
@@ -973,15 +990,31 @@ button.playlist-item.playlist-item--mode {
       grid-column: 1;
       z-index: 0;
       position: relative;
-      align-self: stretch;
-      aspect-ratio: unset;
+      align-self: center;
+      justify-self: center;
+      width: 100%;
+      max-width: 100%;
+      aspect-ratio: 1 / 1;
+      max-height: min(100%, 100vw);
       min-height: 0;
-      max-height: none;
-      height: 100%;
+      height: auto;
     }
 
     .player-shell--pick-mode .player-main > * {
       z-index: 0;
+    }
+
+    .player-shell--pick-mode button.playlist-item.playlist-item--mode {
+      background: rgba(6, 6, 6, 0.68);
+      border-color: rgba(255, 255, 255, 0.22);
+      box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    }
+
+    .player-shell--pick-mode button.playlist-item.playlist-item--mode:hover {
+      background: rgba(14, 14, 14, 0.78);
+      border-color: rgba(255, 255, 255, 0.28);
     }
 
     .player-shell--pick-mode .playlist {
