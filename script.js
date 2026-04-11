@@ -1232,6 +1232,7 @@ function syncPlaylistDrawer() {
 
   if (mode === null && narrow) {
     playlistToggle.setAttribute("aria-expanded", "true");
+    syncPickPlaylistPanelSlot();
     return;
   }
 
@@ -1244,6 +1245,33 @@ function syncPlaylistDrawer() {
     }
     const open = playerShell.classList.contains("playlist-expanded");
     playlistToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
+  syncPickPlaylistPanelSlot();
+}
+
+/**
+ * Narrow pick: keep #playlist-panel inside #player-main so absolute inset is clipped to the
+ * hero image (WebKit often mis-sizes abspos grid children against the full shell).
+ */
+function syncPickPlaylistPanelSlot() {
+  if (!playerShell || !playlistPanel || !playerMainEl) return;
+  const suite = playerShell.querySelector(".playlist-suite");
+  const header = suite?.querySelector(".playlist-header");
+  if (!suite || !header) return;
+
+  const narrow = playerShellContentInlineSize(playerShell) <= NARROW_SHELL_PX;
+  const pick = mode === null;
+
+  if (pick && narrow) {
+    if (playlistPanel.parentElement !== playerMainEl) {
+      playerMainEl.appendChild(playlistPanel);
+    }
+    return;
+  }
+
+  if (playlistPanel.parentElement === playerMainEl) {
+    header.insertAdjacentElement("afterend", playlistPanel);
   }
 }
 
@@ -1263,122 +1291,3 @@ scheduleStudioTakesManifestRefresh();
 applyPickModeShell();
 renderPlaylist();
 syncPlaylistDrawer();
-
-// #region agent log
-(function agentDbgPickLayout() {
-  const ENDPOINT =
-    "http://127.0.0.1:7626/ingest/fcca8389-a788-4691-a60a-d529e0a47596";
-  const SESSION = "b5d82f";
-
-  function send(hypothesisId, location, message, data) {
-    fetch(ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Debug-Session-Id": SESSION,
-      },
-      body: JSON.stringify({
-        sessionId: SESSION,
-        hypothesisId,
-        location,
-        message,
-        data,
-        timestamp: Date.now(),
-        runId:
-          typeof window.__AGENT_DBG_RUN__ === "string"
-            ? window.__AGENT_DBG_RUN__
-            : "repro-1",
-      }),
-    }).catch(() => {});
-  }
-
-  function measure() {
-    const shell = document.querySelector(".player-shell");
-    if (!shell) {
-      send("H0", "script.js:agentDbg", "no-shell", {});
-      return;
-    }
-    const pick = shell.classList.contains("player-shell--pick-mode");
-    const expanded = shell.classList.contains("playlist-expanded");
-    const main = document.getElementById("player-main");
-    const panel = document.getElementById("playlist-panel");
-    const toggle = document.querySelector(".playlist-toggle");
-    const ul = document.getElementById("playlist");
-
-    function rect(el) {
-      if (!el) return null;
-      const r = el.getBoundingClientRect();
-      return {
-        left: +r.left.toFixed(2),
-        width: +r.width.toFixed(2),
-        cx: +(r.left + r.width / 2).toFixed(2),
-      };
-    }
-
-    const cqSupport = CSS.supports?.("container-type: inline-size") ?? null;
-    let contentInline = null;
-    try {
-      contentInline = playerShellContentInlineSize(shell);
-    } catch (_) {
-      contentInline = null;
-    }
-
-    const cPanel = panel ? getComputedStyle(panel) : null;
-    const cUl = ul ? getComputedStyle(ul) : null;
-    const cToggle = toggle ? getComputedStyle(toggle) : null;
-    const mainR = rect(main);
-    const ulR = rect(ul);
-    const toggleR = rect(toggle);
-    const btn = ul?.querySelector("button.playlist-item--mode");
-    const btnR = rect(btn);
-
-    send("H1-H5", "script.js:agentDbg.measure", "pick-layout-metrics", {
-      pick,
-      expanded,
-      narrowJs:
-        contentInline != null ? contentInline <= NARROW_SHELL_PX : null,
-      contentInlineSize:
-        contentInline != null ? +contentInline.toFixed(2) : null,
-      innerWidth: typeof window !== "undefined" ? window.innerWidth : null,
-      cqSupport,
-      liCount: ul ? ul.querySelectorAll("li").length : 0,
-      panelDisplay: cPanel?.display ?? null,
-      panelAlignItems: cPanel?.alignItems ?? null,
-      panelPosition: cPanel?.position ?? null,
-      panelGridRow: cPanel?.gridRowStart ?? null,
-      ulWidth: cUl?.width ?? null,
-      ulMaxWidth: cUl?.maxWidth ?? null,
-      ulMarginLeft: cUl?.marginLeft ?? null,
-      ulMarginRight: cUl?.marginRight ?? null,
-      toggleWidth: cToggle?.width ?? null,
-      rect: { main: mainR, ul: ulR, toggle: toggleR, firstModeBtn: btnR },
-      deltaUlMinusMainCx:
-        mainR && ulR ? +(ulR.cx - mainR.cx).toFixed(2) : null,
-      deltaBtnMinusMainCx:
-        mainR && btnR ? +(btnR.cx - mainR.cx).toFixed(2) : null,
-      deltaToggleMinusMainCx:
-        mainR && toggleR ? +(toggleR.cx - mainR.cx).toFixed(2) : null,
-    });
-  }
-
-  function schedule() {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(measure);
-    });
-  }
-
-  schedule();
-  window.addEventListener("resize", () => {
-    clearTimeout(window.__agentDbgPickT);
-    window.__agentDbgPickT = setTimeout(schedule, 200);
-  });
-  if ("ResizeObserver" in window) {
-    const ro = new ResizeObserver(() => {
-      clearTimeout(window.__agentDbgPickT2);
-      window.__agentDbgPickT2 = setTimeout(schedule, 150);
-    });
-    const s = document.querySelector(".player-shell");
-    if (s) ro.observe(s);
-  }
-})();
-// #endregion
