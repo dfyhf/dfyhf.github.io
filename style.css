@@ -148,6 +148,33 @@ nav ul li a:hover {
   min-width: 0;
 }
 
+/* After .player-shell-inner so min-height: 0 wins over desktop min-height: 460px. */
+@media (max-width: 520px) {
+  body {
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: calc(50px + env(safe-area-inset-top, 0px) + 8px);
+    padding-right: 0;
+    padding-left: 0;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .player-shell {
+    max-height: calc(
+      100dvh - 50px - env(safe-area-inset-top, 0px) - 8px - 12px -
+        env(safe-area-inset-bottom, 0px)
+    );
+    display: flex;
+    flex-direction: column;
+  }
+
+  .player-shell-inner {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
 .player-blade {
   display: flex;
   flex-direction: column;
@@ -493,21 +520,35 @@ button.playlist-item.playlist-item--mode {
   align-items: center;
   text-align: center;
   max-width: 100%;
-  gap: 0.4rem;
+  gap: 0.28rem;
 }
 
 .player-shell--pick-mode .playlist-item-name {
   white-space: normal;
   text-align: center;
-  font-size: 0.82rem;
-  line-height: 1.2;
+  font-size: 0.8rem;
+  line-height: 1.14;
 }
 
 .player-shell--pick-mode .playlist-item-subline {
   text-align: center;
   max-width: none;
-  font-size: 0.7rem;
-  line-height: 1.28;
+  font-size: 0.64rem;
+  line-height: 1.2;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.player-shell--pick-mode .playlist-item-tertiary {
+  text-align: center;
+  max-width: none;
+  font-size: 0.56rem;
+  line-height: 1.16;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.62;
+  margin-top: 0.34rem;
 }
 
 .playlist-item-mode-label {
@@ -525,6 +566,17 @@ button.playlist-item.playlist-item--mode {
   line-height: 1.3;
   opacity: 0.8;
   white-space: normal;
+}
+
+.playlist-item-tertiary {
+  font-family: "Merriweather", serif;
+  font-size: 0.64rem;
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  opacity: 0.68;
+  white-space: normal;
+  margin-top: 0.3rem;
 }
 
 .playlist-item-mode-spacer {
@@ -746,24 +798,24 @@ button.playlist-item.playlist-item--mode {
 @container player (max-width: 440px) {
   .player-shell-inner {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto minmax(140px, auto);
+    grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
     min-height: 0;
     gap: 0;
     background: rgba(8, 8, 8, 0.55);
   }
 
-  /* No third row until playlist is opened — avoids empty minmax(140px) gap */
+  /* No third row until playlist is opened */
   .player-shell:not(.playlist-expanded) .player-shell-inner {
-    grid-template-rows: auto auto;
+    grid-template-rows: auto minmax(0, 1fr);
   }
 
   /* Pick mode: header → mode list → player hero (list always visible; no drawer toggle) */
   .player-shell--pick-mode .player-shell-inner {
-    grid-template-rows: auto auto minmax(180px, 42vmin);
+    grid-template-rows: auto auto minmax(0, 1fr);
   }
 
   .player-shell--pick-mode:not(.playlist-expanded) .player-shell-inner {
-    grid-template-rows: auto auto minmax(180px, 42vmin);
+    grid-template-rows: auto auto minmax(0, 1fr);
   }
 
   .player-shell--pick-mode .playlist-body {
@@ -777,6 +829,7 @@ button.playlist-item.playlist-item--mode {
     grid-column: 1;
     aspect-ratio: unset;
     min-height: 140px;
+    max-height: 100%;
   }
 
   .player-blade--tracks.playlist-suite {
@@ -795,6 +848,7 @@ button.playlist-item.playlist-item--mode {
     width: 100%;
     max-width: 100%;
     aspect-ratio: 1 / 1;
+    max-height: 100%;
     min-height: 0;
     height: auto;
     overflow-x: hidden;
@@ -822,6 +876,10 @@ button.playlist-item.playlist-item--mode {
     justify-content: flex-start;
     padding-bottom: 10px;
     display: none;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .player-shell.playlist-expanded .playlist-body {
@@ -848,22 +906,22 @@ button.playlist-item.playlist-item--mode {
   @media (max-width: 520px) {
     .player-shell-inner {
       grid-template-columns: 1fr;
-      grid-template-rows: auto auto minmax(140px, auto);
+      grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
       min-height: 0;
       gap: 0;
       background: rgba(8, 8, 8, 0.55);
     }
 
     .player-shell:not(.playlist-expanded) .player-shell-inner {
-      grid-template-rows: auto auto;
+      grid-template-rows: auto minmax(0, 1fr);
     }
 
     .player-shell--pick-mode .player-shell-inner {
-      grid-template-rows: auto auto minmax(180px, 42vmin);
+      grid-template-rows: auto auto minmax(0, 1fr);
     }
 
     .player-shell--pick-mode:not(.playlist-expanded) .player-shell-inner {
-      grid-template-rows: auto auto minmax(180px, 42vmin);
+      grid-template-rows: auto auto minmax(0, 1fr);
     }
 
     .player-shell--pick-mode .playlist-body {
@@ -877,6 +935,7 @@ button.playlist-item.playlist-item--mode {
       grid-column: 1;
       aspect-ratio: unset;
       min-height: 140px;
+      max-height: 100%;
     }
 
     .player-blade--tracks.playlist-suite {
@@ -895,6 +954,7 @@ button.playlist-item.playlist-item--mode {
       width: 100%;
       max-width: 100%;
       aspect-ratio: 1 / 1;
+      max-height: 100%;
       min-height: 0;
       height: auto;
       overflow-x: hidden;
@@ -921,6 +981,10 @@ button.playlist-item.playlist-item--mode {
       justify-content: flex-start;
       padding-bottom: 10px;
       display: none;
+      min-height: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .player-shell.playlist-expanded .playlist-body {

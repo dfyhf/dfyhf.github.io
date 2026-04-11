@@ -580,19 +580,19 @@ function renderModePickerList() {
   playlistEl.setAttribute("role", "list");
 
   const rows = [
-    { mode: /** @type {const} */ ("iteration1"), title: "iteration 1", sub: "Early Demo Passes" },
-    { mode: /** @type {const} */ ("iteration2"), title: "iteration 2", sub: "Most Recent Demos" },
-    { mode: /** @type {const} */ ("studioTakes"), title: "Studio Takes", sub: "Various Takes of Each Track" },
+    { mode: /** @type {const} */ ("iteration1"), title: "iteration 1", sub: "Early Demo Passes", era: "Fall 2020" },
+    { mode: /** @type {const} */ ("iteration2"), title: "iteration 2", sub: "Most Recent Demos", era: "Fall 2021" },
+    { mode: /** @type {const} */ ("studioTakes"), title: "Studio Takes", sub: "Various Takes of Each Track", era: "Summer 2022" },
   ];
 
-  rows.forEach(({ mode: m, title, sub }) => {
+  rows.forEach(({ mode: m, title, sub, era }) => {
     const li = document.createElement("li");
     li.setAttribute("role", "listitem");
 
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "playlist-item playlist-item--mode";
-    btn.setAttribute("aria-label", `${title}: ${sub}`);
+    btn.setAttribute("aria-label", `${title}: ${sub}: ${era}`);
 
     const labelWrap = document.createElement("span");
     labelWrap.className = "playlist-item-mode-label";
@@ -605,8 +605,13 @@ function renderModePickerList() {
     subEl.className = "playlist-item-subline";
     subEl.textContent = sub;
 
+    const eraEl = document.createElement("span");
+    eraEl.className = "playlist-item-tertiary";
+    eraEl.textContent = era;
+
     labelWrap.appendChild(name);
     labelWrap.appendChild(subEl);
+    labelWrap.appendChild(eraEl);
 
     const spacer = document.createElement("span");
     spacer.className = "playlist-item-duration playlist-item-mode-spacer";
