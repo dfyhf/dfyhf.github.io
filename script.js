@@ -749,11 +749,8 @@ function renderStudioTakesAlbumList(options = {}) {
     if (!browsable) {
       li.classList.add("playlist-item--disabled");
       li.setAttribute("aria-disabled", "true");
-      const sub = document.createElement("span");
-      sub.className = "playlist-item-subline";
-      sub.textContent = "No takes yet";
+      li.setAttribute("aria-label", `${track.displayName} — no studio takes yet`);
       labelWrap.appendChild(name);
-      labelWrap.appendChild(sub);
       cue.textContent = "";
     } else {
       cue.textContent = "›";
