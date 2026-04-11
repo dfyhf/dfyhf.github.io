@@ -184,6 +184,15 @@ nav ul li a:hover {
     flex: 0 1 auto;
     overflow: visible;
   }
+
+  /* Pick landing: fill space under fixed header so body bg does not show a “second band” below the card */
+  .player-shell--pick-mode {
+    min-height: calc(
+      100dvh - 50px - env(safe-area-inset-top, 0px) - 12px - 12px -
+        env(safe-area-inset-bottom, 0px) - 16px
+    );
+    max-height: none;
+  }
 }
 
 .player-blade {
@@ -218,7 +227,7 @@ nav ul li a:hover {
    */
   .player-shell--pick-mode .player-shell-inner {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto 1fr;
     min-height: 0;
     gap: 0;
     background: rgba(8, 8, 8, 0.55);
@@ -263,12 +272,14 @@ nav ul li a:hover {
     grid-column: 1;
     z-index: 0;
     position: relative;
+    align-self: stretch;
     width: 100%;
     max-width: 100%;
-    aspect-ratio: 1 / 1;
-    max-height: min(100cqw, 86vmin);
     min-height: 0;
-    height: auto;
+    height: 100%;
+    aspect-ratio: unset;
+    max-height: none;
+    overflow: hidden;
   }
 
   .player-shell--pick-mode .player-main > * {
@@ -296,7 +307,7 @@ nav ul li a:hover {
 
   .player-shell--pick-mode .playlist > li {
     aspect-ratio: 2 / 1;
-    width: clamp(11rem, 58cqi, 12.75rem);
+    width: max(12rem, min(calc(100cqw - 24px), 22rem));
     max-width: 100%;
     min-height: 0;
     flex-shrink: 0;
@@ -942,10 +953,10 @@ button.playlist-item.playlist-item--mode {
     grid-template-rows: auto auto auto;
   }
 
-  /* Pick narrow: row2 = auto height (hero square only) — no 1fr gap below photo that breaks overlay alignment */
+  /* Pick narrow: row2 grows so hero + overlay share a definite height (fixes iOS % / short-card gap vs body bg) */
   .player-shell--pick-mode .player-shell-inner,
   .player-shell--pick-mode:not(.playlist-expanded) .player-shell-inner {
-    grid-template-rows: auto auto;
+    grid-template-rows: auto 1fr;
   }
 
   /* Flex center; overrides global pick .playlist-body stretch + beats stray width rules */
@@ -978,12 +989,14 @@ button.playlist-item.playlist-item--mode {
     grid-column: 1;
     z-index: 0;
     position: relative;
+    align-self: stretch;
     width: 100%;
     max-width: 100%;
-    aspect-ratio: 1 / 1;
-    max-height: min(100cqw, 100%);
     min-height: 0;
-    height: auto;
+    height: 100%;
+    aspect-ratio: unset;
+    max-height: none;
+    overflow: hidden;
   }
 
   .player-shell--pick-mode .player-main > * {
@@ -1033,10 +1046,10 @@ button.playlist-item.playlist-item--mode {
     box-sizing: border-box;
   }
 
-  /* ~original proportions, modestly larger than 11rem — not full-bleed strips */
+  /* Wider on phones: scales with shell (cqw), still capped for 2:1 readability */
   .player-shell--pick-mode .playlist > li {
     aspect-ratio: 2 / 1;
-    width: clamp(11rem, 58cqi, 12.75rem);
+    width: max(12rem, min(calc(100cqw - 24px), 22rem));
     max-width: 100%;
     min-height: 0;
     flex-shrink: 0;
@@ -1163,7 +1176,7 @@ button.playlist-item.playlist-item--mode {
 
     .player-shell--pick-mode .player-shell-inner,
     .player-shell--pick-mode:not(.playlist-expanded) .player-shell-inner {
-      grid-template-rows: auto auto;
+      grid-template-rows: auto 1fr;
     }
 
     .player-shell--pick-mode .playlist-body {
@@ -1195,12 +1208,14 @@ button.playlist-item.playlist-item--mode {
       grid-column: 1;
       z-index: 0;
       position: relative;
+      align-self: stretch;
       width: 100%;
       max-width: 100%;
-      aspect-ratio: 1 / 1;
-      max-height: min(100vw, 100%);
       min-height: 0;
-      height: auto;
+      height: 100%;
+      aspect-ratio: unset;
+      max-height: none;
+      overflow: hidden;
     }
 
     .player-shell--pick-mode .player-main > * {
@@ -1251,7 +1266,7 @@ button.playlist-item.playlist-item--mode {
 
     .player-shell--pick-mode .playlist > li {
       aspect-ratio: 2 / 1;
-      width: clamp(11rem, 58vw, 12.75rem);
+      width: max(12rem, min(calc(100vw - 24px), 22rem));
       max-width: 100%;
       min-height: 0;
       flex-shrink: 0;
@@ -1359,7 +1374,7 @@ button.playlist-item.playlist-item--mode {
   @media (min-width: 521px) {
     .player-shell--pick-mode .player-shell-inner {
       grid-template-columns: 1fr;
-      grid-template-rows: auto auto;
+      grid-template-rows: auto 1fr;
       min-height: 0;
       gap: 0;
       background: rgba(8, 8, 8, 0.55);
@@ -1404,12 +1419,14 @@ button.playlist-item.playlist-item--mode {
       grid-column: 1;
       z-index: 0;
       position: relative;
+      align-self: stretch;
       width: 100%;
       max-width: 100%;
-      aspect-ratio: 1 / 1;
-      max-height: min(100vw, 86vmin);
       min-height: 0;
-      height: auto;
+      height: 100%;
+      aspect-ratio: unset;
+      max-height: none;
+      overflow: hidden;
     }
 
     .player-shell--pick-mode .player-main > * {
@@ -1437,7 +1454,7 @@ button.playlist-item.playlist-item--mode {
 
     .player-shell--pick-mode .playlist > li {
       aspect-ratio: 2 / 1;
-      width: clamp(11rem, 58vw, 12.75rem);
+      width: max(12rem, min(calc(100vw - 24px), 22rem));
       max-width: 100%;
       min-height: 0;
       flex-shrink: 0;
