@@ -264,11 +264,11 @@ nav ul li a:hover {
     position: relative;
     isolation: isolate;
     justify-self: stretch;
-    align-self: center;
+    align-self: stretch;
     width: 100%;
     max-width: 100%;
-    aspect-ratio: 1 / 1;
-    max-height: min(100cqw, 92vmin);
+    aspect-ratio: 4 / 3;
+    max-height: none;
     min-height: 0;
     height: auto;
     overflow: hidden;
@@ -984,11 +984,11 @@ button.playlist-item.playlist-item--mode {
     position: relative;
     isolation: isolate;
     justify-self: stretch;
-    align-self: center;
+    align-self: stretch;
     width: 100%;
     max-width: 100%;
-    aspect-ratio: 1 / 1;
-    max-height: min(100cqw, 92vmin);
+    aspect-ratio: 4 / 3;
+    max-height: none;
     min-height: 0;
     height: auto;
     overflow: hidden;
@@ -1085,20 +1085,37 @@ button.playlist-item.playlist-item--mode {
     min-height: 0;
   }
 
-  /* Listening narrow: landing-style square hero, slightly tighter chrome; list scrolls in-card */
+  /* Listening narrow: full-width hero (photo uses cover), shorter than 1:1 so the track list fits */
   .player-shell:not(.player-shell--pick-mode) .player-main {
-    align-self: center;
-    justify-self: center;
-    /* Same cap on both axes so max-height cannot break aspect-ratio (was e.g. 382×330). */
-    --player-hero-cap: min(100cqw, 86vmin);
-    max-height: var(--player-hero-cap);
-    aspect-ratio: 1 / 1;
-    width: min(100%, var(--player-hero-cap));
+    align-self: stretch;
+    justify-self: stretch;
+    width: 100%;
     max-width: 100%;
+    /* Full card width (no vmin width cap = no side pillarboxing); shorter than 1:1 for playlist room */
+    aspect-ratio: 3 / 2;
+    max-height: none;
     height: auto;
-    padding: 9px 12px 7px;
-    gap: 6px;
+    padding: 7px 10px 6px;
+    gap: 4px;
     overflow-y: hidden;
+  }
+
+  .player-shell:not(.player-shell--pick-mode) .player-main .player-stack {
+    gap: 7px;
+  }
+
+  .player-shell.playlist-expanded:not(.player-shell--pick-mode) .playlist-body {
+    padding-bottom: 6px;
+  }
+
+  .player-shell.playlist-expanded:not(.player-shell--pick-mode) .playlist {
+    padding: 6px 0 8px;
+  }
+
+  .player-shell.playlist-expanded:not(.player-shell--pick-mode) .playlist-item {
+    padding: 7px 12px;
+    font-size: 0.82rem;
+    line-height: 1.28;
   }
 
   .player-shell:not(.player-shell--pick-mode) .playlist-body {
@@ -1208,11 +1225,11 @@ button.playlist-item.playlist-item--mode {
       position: relative;
       isolation: isolate;
       justify-self: stretch;
-      align-self: center;
+      align-self: stretch;
       width: 100%;
       max-width: 100%;
-      aspect-ratio: 1 / 1;
-      max-height: min(100vw, 92vmin);
+      aspect-ratio: 4 / 3;
+      max-height: none;
       min-height: 0;
       height: auto;
       overflow: hidden;
@@ -1308,17 +1325,34 @@ button.playlist-item.playlist-item--mode {
     }
 
     .player-shell:not(.player-shell--pick-mode) .player-main {
-      align-self: center;
-      justify-self: center;
-      --player-hero-cap: min(100vw, 86vmin);
-      max-height: var(--player-hero-cap);
-      aspect-ratio: 1 / 1;
-      width: min(100%, var(--player-hero-cap));
+      align-self: stretch;
+      justify-self: stretch;
+      width: 100%;
       max-width: 100%;
+      aspect-ratio: 3 / 2;
+      max-height: none;
       height: auto;
-      padding: 9px 12px 7px;
-      gap: 6px;
+      padding: 7px 10px 6px;
+      gap: 4px;
       overflow-y: hidden;
+    }
+
+    .player-shell:not(.player-shell--pick-mode) .player-main .player-stack {
+      gap: 7px;
+    }
+
+    .player-shell.playlist-expanded:not(.player-shell--pick-mode) .playlist-body {
+      padding-bottom: 6px;
+    }
+
+    .player-shell.playlist-expanded:not(.player-shell--pick-mode) .playlist {
+      padding: 6px 0 8px;
+    }
+
+    .player-shell.playlist-expanded:not(.player-shell--pick-mode) .playlist-item {
+      padding: 7px 12px;
+      font-size: 0.82rem;
+      line-height: 1.28;
     }
 
     .player-shell:not(.player-shell--pick-mode) .playlist-body {
@@ -1425,11 +1459,11 @@ button.playlist-item.playlist-item--mode {
       position: relative;
       isolation: isolate;
       justify-self: stretch;
-      align-self: center;
+      align-self: stretch;
       width: 100%;
       max-width: 100%;
-      aspect-ratio: 1 / 1;
-      max-height: min(100vw, 92vmin);
+      aspect-ratio: 4 / 3;
+      max-height: none;
       min-height: 0;
       height: auto;
       overflow: hidden;
