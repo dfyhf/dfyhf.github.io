@@ -891,11 +891,12 @@ button.playlist-item.playlist-item--mode {
     justify-content: center;
   }
 
+  /* Wider than desktop pick tiles, but same 2:1 proportion — not “wide + short” strips */
   .player-shell--pick-mode .playlist > li {
-    aspect-ratio: unset;
-    width: calc(100% - 4px);
-    max-width: 100%;
-    min-height: min(96px, 18vmin);
+    aspect-ratio: 2 / 1;
+    width: min(100%, clamp(13.5rem, 76vw, 24rem));
+    max-width: calc(100% - 16px);
+    min-height: 0;
   }
 
   .player-blade--tracks.playlist-suite {
@@ -1076,10 +1077,10 @@ button.playlist-item.playlist-item--mode {
     }
 
     .player-shell--pick-mode .playlist > li {
-      aspect-ratio: unset;
-      width: calc(100% - 4px);
-      max-width: 100%;
-      min-height: min(96px, 18vmin);
+      aspect-ratio: 2 / 1;
+      width: min(100%, clamp(13.5rem, 76vw, 24rem));
+      max-width: calc(100% - 16px);
+      min-height: 0;
     }
 
     .player-blade--tracks.playlist-suite {
