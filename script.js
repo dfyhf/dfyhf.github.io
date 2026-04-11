@@ -194,6 +194,51 @@ function studioTakesRowsForTrack(track) {
   }));
 }
 
+/**
+ * Drop manifest entries whose files are not actually served (stale `files.json` after local deletes).
+ * HEAD first; some static servers return 405 — then try a tiny ranged GET.
+ * @param {Record<string, unknown>} raw
+ * @returns {Promise<Record<string, string | string[]>>}
+ */
+async function filterStudioTakesManifestToExistingFiles(raw) {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return {};
+
+  async function urlExists(url) {
+    try {
+      let r = await fetch(url, { method: "HEAD", cache: "no-store" });
+      if (r.ok) return true;
+      if (r.status === 405) {
+        r = await fetch(url, {
+          method: "GET",
+          cache: "no-store",
+          headers: { Range: "bytes=0-0" },
+        });
+        return r.ok && (r.status === 206 || r.status === 200);
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  }
+
+  /** @type {Record<string, string | string[]>} */
+  const out = {};
+  await Promise.all(
+    Object.keys(raw).map(async (trackId) => {
+      const files = normalizeManifestFileList(raw[trackId]);
+      if (files.length === 0) return;
+      const kept = [];
+      for (const fn of files) {
+        const url = absSrc(studioTakeFileSrc(trackId, fn));
+        if (await urlExists(url)) kept.push(fn);
+      }
+      if (kept.length === 1) out[trackId] = kept[0];
+      else if (kept.length > 1) out[trackId] = kept;
+    }),
+  );
+  return out;
+}
+
 function scheduleStudioTakesManifestRefresh() {
   if (studioTakesManifestFetchInFlight) return;
   // Always request a full body. `cache: "no-cache"` can yield 304 + empty/undecodable bodies in
@@ -208,12 +253,15 @@ function scheduleStudioTakesManifestRefresh() {
       }
     })
     .catch(() => ({}))
-    .then((data) => {
+    .then(async (data) => {
       studioTakesManifestFetchInFlight = null;
-      studioTakesManifestCurrent = data && typeof data === "object" && !Array.isArray(data) ? data : {};
+      const raw = data && typeof data === "object" && !Array.isArray(data) ? data : {};
+      studioTakesManifestCurrent = await filterStudioTakesManifestToExistingFiles(raw);
       warmStudioTakesDurationsFromManifest();
       if (mode === "studioTakes" && !studioTakesView) {
         renderStudioTakesAlbumList({ skipManifestRefresh: true });
+      } else if (mode === "studioTakes" && studioTakesView) {
+        renderStudioTakesTrackList(studioTakesView.trackIndex);
       }
     });
 }
