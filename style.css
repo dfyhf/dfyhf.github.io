@@ -871,12 +871,15 @@ button.playlist-item.playlist-item--mode {
   .player-shell--pick-mode .playlist {
     gap: clamp(14px, 3.5vmin, 28px);
     padding-block: clamp(16px, 4vh, 40px);
+    padding-inline: clamp(10px, 3.5vw, 18px);
     justify-content: center;
   }
 
   .player-shell--pick-mode .playlist > li {
     aspect-ratio: unset;
-    min-height: min(88px, 14vmin);
+    width: calc(100% - 4px);
+    max-width: 100%;
+    min-height: min(96px, 18vmin);
   }
 
   .player-blade--tracks.playlist-suite {
@@ -1020,12 +1023,15 @@ button.playlist-item.playlist-item--mode {
     .player-shell--pick-mode .playlist {
       gap: clamp(14px, 3.5vmin, 28px);
       padding-block: clamp(16px, 4vh, 40px);
+      padding-inline: clamp(10px, 3.5vw, 18px);
       justify-content: center;
     }
 
     .player-shell--pick-mode .playlist > li {
       aspect-ratio: unset;
-      min-height: min(88px, 14vmin);
+      width: calc(100% - 4px);
+      max-width: 100%;
+      min-height: min(96px, 18vmin);
     }
 
     .player-blade--tracks.playlist-suite {
