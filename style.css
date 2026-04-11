@@ -173,6 +173,17 @@ nav ul li a:hover {
     min-height: 0;
     overflow: hidden;
   }
+
+  /* Listening: let card grow with track list — page scrolls, not the playlist panel */
+  .player-shell:not(.player-shell--pick-mode) {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .player-shell:not(.player-shell--pick-mode) .player-shell-inner {
+    flex: 0 1 auto;
+    overflow: visible;
+  }
 }
 
 .player-blade {
@@ -812,6 +823,11 @@ button.playlist-item.playlist-item--mode {
     grid-template-rows: auto minmax(0, 1fr);
   }
 
+  /* Listening: square player + natural list height (no inner tracklist scroll) */
+  .player-shell.playlist-expanded:not(.player-shell--pick-mode) .player-shell-inner {
+    grid-template-rows: auto auto auto;
+  }
+
   /* Pick mode narrow: title row + hero fills below; mode list overlaid (same grid cell) */
   .player-shell--pick-mode .player-shell-inner,
   .player-shell--pick-mode:not(.playlist-expanded) .player-shell-inner {
@@ -915,6 +931,34 @@ button.playlist-item.playlist-item--mode {
     min-height: 0;
   }
 
+  /* Listening narrow: landing-style square hero, slightly tighter chrome; list uses mask, not scroll */
+  .player-shell:not(.player-shell--pick-mode) .player-main {
+    align-self: center;
+    justify-self: center;
+    max-height: min(100cqw, 86vmin);
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    padding: 9px 12px 7px;
+    gap: 6px;
+    overflow-y: hidden;
+  }
+
+  .player-shell:not(.player-shell--pick-mode) .playlist-body {
+    overflow-y: visible;
+    overflow-x: hidden;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(14, 13, 16, 0.38) 0%,
+        rgba(6, 6, 9, 0.88) 22%,
+        rgba(3, 3, 5, 0.95) 100%
+      ),
+      rgba(8, 8, 10, 0.78);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 14px 32px rgba(0, 0, 0, 0.42);
+    -webkit-overflow-scrolling: auto;
+  }
+
   .playlist-body {
     grid-column: 1;
     grid-row: 3;
@@ -964,6 +1008,10 @@ button.playlist-item.playlist-item--mode {
 
     .player-shell:not(.playlist-expanded) .player-shell-inner {
       grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .player-shell.playlist-expanded:not(.player-shell--pick-mode) .player-shell-inner {
+      grid-template-rows: auto auto auto;
     }
 
     .player-shell--pick-mode .player-shell-inner,
@@ -1065,6 +1113,33 @@ button.playlist-item.playlist-item--mode {
     .player-main .player-stack {
       flex: 1 1 auto;
       min-height: 0;
+    }
+
+    .player-shell:not(.player-shell--pick-mode) .player-main {
+      align-self: center;
+      justify-self: center;
+      max-height: min(100vw, 86vmin);
+      aspect-ratio: 1 / 1;
+      width: 100%;
+      padding: 9px 12px 7px;
+      gap: 6px;
+      overflow-y: hidden;
+    }
+
+    .player-shell:not(.player-shell--pick-mode) .playlist-body {
+      overflow-y: visible;
+      overflow-x: hidden;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(14, 13, 16, 0.38) 0%,
+          rgba(6, 6, 9, 0.88) 22%,
+          rgba(3, 3, 5, 0.95) 100%
+        ),
+        rgba(8, 8, 10, 0.78);
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 14px 32px rgba(0, 0, 0, 0.42);
+      -webkit-overflow-scrolling: auto;
     }
 
     .playlist-body {
