@@ -1105,9 +1105,16 @@ button.playlist-item.playlist-item--mode {
     justify-content: center;
     width: 100%;
     box-sizing: border-box;
-    min-height: 50px;
-    padding: 0 14px;
+    appearance: none;
+    -webkit-appearance: none;
+    /* Compact title bar on real phones: avoid min-height:50px + iOS default button padding */
+    min-height: 0;
+    padding: 7px 14px 8px;
     pointer-events: auto;
+  }
+
+  .playlist-toggle .playlist-album-title {
+    line-height: 1.12;
   }
 
   .player-blade {
@@ -1341,9 +1348,15 @@ button.playlist-item.playlist-item--mode {
       justify-content: center;
       width: 100%;
       box-sizing: border-box;
-      min-height: 50px;
-      padding: 0 14px;
+      appearance: none;
+      -webkit-appearance: none;
+      min-height: 0;
+      padding: 7px 14px 8px;
       pointer-events: auto;
+    }
+
+    .playlist-toggle .playlist-album-title {
+      line-height: 1.12;
     }
 
     .player-blade {
