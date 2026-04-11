@@ -269,8 +269,21 @@ nav ul li a:hover {
   .player-shell--pick-mode .playlist-item-mode-label {
     width: 100%;
     max-width: 100%;
+    min-width: 0;
     align-items: center;
     text-align: center;
+    overflow: hidden;
+  }
+
+  /* Blade is narrow (~256px): keep mode sublines one line (Studio Takes copy is longest). */
+  .player-shell--pick-mode .playlist-item-subline {
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.58rem;
+    letter-spacing: -0.02em;
+    line-height: 1.22;
   }
 }
 
@@ -1422,8 +1435,20 @@ button.playlist-item.playlist-item--mode {
     .player-shell--pick-mode .playlist-item-mode-label {
       width: 100%;
       max-width: 100%;
+      min-width: 0;
       align-items: center;
       text-align: center;
+      overflow: hidden;
+    }
+
+    .player-shell--pick-mode .playlist-item-subline {
+      white-space: nowrap;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.58rem;
+      letter-spacing: -0.02em;
+      line-height: 1.22;
     }
   }
 }
