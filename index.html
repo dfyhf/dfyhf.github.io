@@ -153,6 +153,12 @@
     </div>
 
     <script src="/music/iteration-2/files.inline.js?v=1"></script>
-    <script src="/script.js?v=47"></script>
+    <!-- Cloudflare Worker ingest (Worker name: iterations) -->
+    <script>
+      window.MUSIC_EVENTS_LOG_URL = "https://iterations.royal-morning-9521.workers.dev/log";
+      // Optional if you set INGEST_SECRET on the Worker (note: visible to anyone who views source)
+      window.MUSIC_EVENTS_INGEST_SECRET = "";
+    </script>
+    <script src="/script.js?v=49"></script>
   </body>
 </html>

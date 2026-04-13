@@ -29,6 +29,85 @@ const ALBUM_TITLE = "The Garden Path";
 const STUDIO_TAKES_LIST_TITLE = "Studio Takes";
 const ARTIST = "iterations";
 
+/**
+ * Cloudflare Worker music telemetry (`POST …/log`). Set `window.MUSIC_EVENTS_LOG_URL` in index.html.
+ * @param {"play" | "download"} kind
+ * @param {Record<string, unknown>} [detail]
+ */
+function logMusicEvent(kind, detail = {}) {
+  const url =
+    typeof window !== "undefined" && typeof window.MUSIC_EVENTS_LOG_URL === "string"
+      ? window.MUSIC_EVENTS_LOG_URL.trim()
+      : "";
+  if (!url || !/^https:\/\//i.test(url)) return;
+
+  const secret =
+    typeof window !== "undefined" && typeof window.MUSIC_EVENTS_INGEST_SECRET === "string"
+      ? window.MUSIC_EVENTS_INGEST_SECRET.trim()
+      : "";
+
+  const ctx = getCurrentTrackContextForLogging();
+  const playlistSrc = music.dataset.playlistSrc || "";
+  const absUrl =
+    detail.url ||
+    (playlistSrc ? absSrc(playlistSrc) : "") ||
+    (music.currentSrc || "");
+
+  const body = {
+    event: kind,
+    track: typeof detail.track === "string" ? detail.track : ctx.track || titleEl?.textContent?.trim() || "",
+    trackId: detail.trackId ?? ctx.trackId ?? null,
+    album: typeof detail.album === "string" ? detail.album : ctx.album,
+    url: absUrl || null,
+    clientTs: new Date().toISOString(),
+    extra: { mode, ...(ctx.extra && typeof ctx.extra === "object" ? ctx.extra : {}), ...(detail.extra && typeof detail.extra === "object" ? detail.extra : {}) },
+  };
+
+  const headers = { "Content-Type": "application/json" };
+  if (secret) headers.Authorization = `Bearer ${secret}`;
+
+  try {
+    fetch(url, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body),
+      keepalive: true,
+      mode: "cors",
+      credentials: "omit",
+    }).catch(() => {});
+  } catch {
+    /* ignore */
+  }
+}
+
+/** @returns {{ track?: string, trackId?: string | null, album?: string | null, extra?: Record<string, unknown> }} */
+function getCurrentTrackContextForLogging() {
+  if (mode === "iteration1") {
+    const t = iteration1Tracks[songIndex];
+    if (!t) return { album: "iteration 1" };
+    return { trackId: t.id, track: t.displayName, album: "iteration 1" };
+  }
+  if (mode === "iteration2") {
+    const t = iteration2Tracks[songIndex];
+    if (!t) return { album: "iteration 2" };
+    return { trackId: t.id, track: t.displayName, album: "iteration 2" };
+  }
+  if (mode === "studioTakes" && studioTakesView) {
+    const track = iteration1Tracks[studioTakesView.trackIndex];
+    if (!track) return { album: "Studio Takes" };
+    const takes = studioTakesRowsForTrack(track);
+    const v = takes[songIndex];
+    return {
+      trackId: track.id,
+      track: track.displayName,
+      album: "Studio Takes",
+      extra: v ? { takeLabel: v.label, takeSrc: v.src } : {},
+    };
+  }
+  if (mode === "studioTakes") return { album: "Studio Takes" };
+  return {};
+}
+
 const MUSIC_DIR = "/music";
 const ITERATION_1_DIR = `${MUSIC_DIR}/iteration-1`;
 const ITERATION_2_DIR = `${MUSIC_DIR}/iteration-2`;
@@ -1177,6 +1256,16 @@ prevBtn.addEventListener("click", () => step(-1));
 nextBtn.addEventListener("click", () => step(1));
 
 music.addEventListener("timeupdate", updateProgressBar);
+music.addEventListener("play", () => {
+  logMusicEvent("play");
+});
+if (downloadLink) {
+  downloadLink.addEventListener("click", () => {
+    const href = downloadLink.getAttribute("href");
+    if (!href || href === "#") return;
+    logMusicEvent("download", { url: href });
+  });
+}
 music.addEventListener("loadedmetadata", () => {
   // #region agent log
   fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
