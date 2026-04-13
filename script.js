@@ -33,13 +33,14 @@ const ARTIST = "iterations";
  * Cloudflare Worker music telemetry (`POST …/log`). Set `window.MUSIC_EVENTS_LOG_URL` in index.html.
  * @param {"play" | "download"} kind
  * @param {Record<string, unknown>} [detail]
+ * @returns {Promise<void>}
  */
 function logMusicEvent(kind, detail = {}) {
   const url =
     typeof window !== "undefined" && typeof window.MUSIC_EVENTS_LOG_URL === "string"
       ? window.MUSIC_EVENTS_LOG_URL.trim()
       : "";
-  if (!url || !/^https:\/\//i.test(url)) return;
+  if (!url || !/^https:\/\//i.test(url)) return Promise.resolve();
 
   const secret =
     typeof window !== "undefined" && typeof window.MUSIC_EVENTS_INGEST_SECRET === "string"
@@ -74,12 +75,13 @@ function logMusicEvent(kind, detail = {}) {
   if (secret) headers.Authorization = `Bearer ${secret}`;
 
   try {
-    fetch(url, {
+    return fetch(url, {
       method: "POST",
       headers,
       body: JSON.stringify(body),
       mode: "cors",
       credentials: "omit",
+      keepalive: true,
     })
       .then(async (res) => {
         if (res.ok) return;
@@ -91,6 +93,7 @@ function logMusicEvent(kind, detail = {}) {
       });
   } catch (e) {
     console.warn("[iterations music-events]", e);
+    return Promise.resolve();
   }
 }
 
@@ -1271,13 +1274,30 @@ nextBtn.addEventListener("click", () => step(1));
 
 music.addEventListener("timeupdate", updateProgressBar);
 music.addEventListener("play", () => {
-  logMusicEvent("play");
+  void logMusicEvent("play");
 });
 if (downloadLink) {
-  downloadLink.addEventListener("click", () => {
+  downloadLink.addEventListener("click", (e) => {
     const href = downloadLink.getAttribute("href");
+    const dlName = downloadLink.getAttribute("download") || "";
     if (!href || href === "#") return;
-    logMusicEvent("download", { url: href });
+    // Default <a> navigation can unload the page before fetch finishes; log first, then download.
+    e.preventDefault();
+    void (async () => {
+      try {
+        await logMusicEvent("download", { url: href });
+      } catch {
+        /* still offer file */
+      }
+      const a = document.createElement("a");
+      a.href = href;
+      if (dlName) a.setAttribute("download", dlName);
+      a.rel = "noopener";
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    })();
   });
 }
 music.addEventListener("loadedmetadata", () => {
