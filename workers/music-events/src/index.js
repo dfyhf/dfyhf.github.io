@@ -197,7 +197,7 @@ async function handleGetRecent(request, env, baseHeaders) {
   }
 
   const url = new URL(request.url);
-  const limit = Math.min(100, Math.max(1, parseInt(url.searchParams.get('limit') || '50', 10) || 50));
+  const limit = Math.min(500, Math.max(1, parseInt(url.searchParams.get('limit') || '50', 10) || 50));
 
   const listed = await env.MUSIC_LOGS.list({ prefix: 'event:', limit });
   const keys = listed.keys.sort((a, b) => (a.name < b.name ? 1 : -1)).slice(0, limit);
