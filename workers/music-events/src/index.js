@@ -4,6 +4,8 @@
  * Setup:
  * 1. Create a KV namespace (Workers & Pages → KV) and put its id in wrangler.toml as MUSIC_LOGS.
  * 2. Deploy: cd workers/music-events && npx wrangler deploy
+ *    (wrangler.toml name must match the Worker in the dashboard, e.g. iterations.)
+ * 3. Wrangler 4: `kv key list` uses local storage by default — add `--remote` to hit Cloudflare.
  * 3. Optional env vars (Dashboard → Worker → Settings → Variables):
  *    - ALLOWED_ORIGIN: https://iterations.band (comma-separate multiple origins if needed)
  *    - INGEST_SECRET: if set, POST /log must send header Authorization: Bearer <secret>
@@ -170,7 +172,13 @@ async function handlePostLog(request, env, ctx, baseHeaders) {
     fingerprint: collectClientFingerprint(request),
   };
 
-  ctx.waitUntil(env.MUSIC_LOGS.put(key, JSON.stringify(record)));
+  try {
+    await env.MUSIC_LOGS.put(key, JSON.stringify(record));
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : String(err);
+    console.error('MUSIC_LOGS.put failed', detail);
+    return jsonResponse({ ok: false, error: 'kv_put_failed', detail }, 500, baseHeaders);
+  }
 
   return jsonResponse({ ok: true, id }, 200, baseHeaders);
 }
