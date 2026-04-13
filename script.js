@@ -30,6 +30,24 @@ const STUDIO_TAKES_LIST_TITLE = "Studio Takes";
 const ARTIST = "iterations";
 
 /**
+ * @param {Date} date
+ * @returns {string} e.g. "09:05 pm 04/13/2026" (12h, lowercase am/pm, mm/dd/yyyy; local clock)
+ */
+function formatTimestampAmPmMdYyyy(date) {
+  let h = date.getHours();
+  const min = date.getMinutes();
+  const ampm = h >= 12 ? "pm" : "am";
+  h = h % 12;
+  if (h === 0) h = 12;
+  const hh = String(h).padStart(2, "0");
+  const mStr = String(min).padStart(2, "0");
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  const yyyy = date.getFullYear();
+  return `${hh}:${mStr} ${ampm} ${mm}/${dd}/${yyyy}`;
+}
+
+/**
  * Cloudflare Worker music telemetry (`POST …/log`). Set `window.MUSIC_EVENTS_LOG_URL` in index.html.
  * @param {"play" | "download"} kind
  * @param {Record<string, unknown>} [detail]
@@ -67,7 +85,7 @@ function logMusicEvent(kind, detail = {}) {
     trackId: detail.trackId ?? ctx.trackId ?? null,
     album: typeof detail.album === "string" ? detail.album : ctx.album,
     url: absUrl || null,
-    clientTs: new Date().toISOString(),
+    clientTs: formatTimestampAmPmMdYyyy(new Date()),
     extra: { mode, ...(ctx.extra && typeof ctx.extra === "object" ? ctx.extra : {}), ...(detail.extra && typeof detail.extra === "object" ? detail.extra : {}) },
   };
 
@@ -116,7 +134,7 @@ function getCurrentTrackContextForLogging() {
     const v = takes[songIndex];
     return {
       trackId: track.id,
-      track: track.displayName,
+      track: v ? studioTakeDisplayTitle(track.displayName, songIndex) : track.displayName,
       album: "Studio Takes",
       extra: v ? { takeLabel: v.label, takeSrc: v.src } : {},
     };
@@ -288,6 +306,15 @@ function studioTakesRowsForTrack(track) {
     src: studioTakeFileSrc(track.id, fn),
     downloadName: fn,
   }));
+}
+
+/**
+ * Player / telemetry title: song name plus take number (manifest order = Take 1, 2, …).
+ * @param {string} trackDisplayName
+ * @param {number} takeIndexZeroBased
+ */
+function studioTakeDisplayTitle(trackDisplayName, takeIndexZeroBased) {
+  return `${trackDisplayName} — Take ${takeIndexZeroBased + 1}`;
 }
 
 /**
@@ -931,7 +958,7 @@ function renderStudioTakesTrackList(trackIndex) {
 
     const name = document.createElement("span");
     name.className = "playlist-item-name";
-    name.textContent = v.label;
+    name.textContent = studioTakeDisplayTitle(track.displayName, i);
 
     const duration = document.createElement("span");
     duration.className = "playlist-item-duration";
@@ -965,7 +992,12 @@ function renderStudioTakesTrackList(trackIndex) {
       // #endregion
       songIndex = i;
       showPlayerChrome();
-      loadAndPrime(v.src, track.displayName, track.artist, v.downloadName || `${track.displayName} - ${v.label}.mp3`);
+      loadAndPrime(
+        v.src,
+        studioTakeDisplayTitle(track.displayName, i),
+        track.artist,
+        v.downloadName || `${track.displayName} - ${v.label}.mp3`,
+      );
       setActivePlaylistIndex(songIndex);
       playSong();
     });
@@ -977,7 +1009,12 @@ function renderStudioTakesTrackList(trackIndex) {
   if (takes.length > 0 && !takes.some((take) => take.src === currentPlaylistSrc)) {
     const firstTake = takes[0];
     songIndex = 0;
-    loadAndPrime(firstTake.src, track.displayName, track.artist, firstTake.downloadName || `${track.displayName} - ${firstTake.label}.mp3`);
+    loadAndPrime(
+      firstTake.src,
+      studioTakeDisplayTitle(track.displayName, 0),
+      track.artist,
+      firstTake.downloadName || `${track.displayName} - ${firstTake.label}.mp3`,
+    );
     // #region agent log
     fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
       method: "POST",
@@ -1151,7 +1188,12 @@ function step(delta) {
   if (songIndex < 0) songIndex = takes.length - 1;
   if (songIndex > takes.length - 1) songIndex = 0;
   const v = takes[songIndex];
-  loadAndPrime(v.src, track.displayName, track.artist, v.downloadName || `${track.displayName} - ${v.label}.mp3`);
+  loadAndPrime(
+    v.src,
+    studioTakeDisplayTitle(track.displayName, songIndex),
+    track.artist,
+    v.downloadName || `${track.displayName} - ${v.label}.mp3`,
+  );
   setActivePlaylistIndex(songIndex);
   playSong();
 }
