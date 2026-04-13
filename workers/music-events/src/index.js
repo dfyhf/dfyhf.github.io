@@ -6,7 +6,7 @@
  * 2. Deploy: cd workers/music-events && npx wrangler deploy
  *    (wrangler.toml name must match the Worker in the dashboard, e.g. iterations.)
  * 3. Wrangler 4: `kv key list` uses local storage by default — add `--remote` to hit Cloudflare.
- * 3. Optional env vars (Dashboard → Worker → Settings → Variables):
+ * 4. Optional env vars (Dashboard → Worker → Settings → Variables):
  *    - ALLOWED_ORIGIN: https://iterations.band (comma-separate multiple origins if needed)
  *    - INGEST_SECRET: if set, POST /log must send header Authorization: Bearer <secret>
  *    - READ_SECRET: if set, GET /recent requires Authorization: Bearer <secret>
@@ -16,7 +16,12 @@
  * event must be "play" or "download" — other requests are not stored (no “access log” rows).
  */
 
-const DEFAULT_ALLOWED_ORIGINS = ['https://iterations.band'];
+/** Hosts that may POST /log or GET /recent from a browser (must match `Origin` exactly). */
+const DEFAULT_ALLOWED_ORIGINS = [
+  'https://iterations.band',
+  'https://www.iterations.band',
+  'https://dfyhf.github.io',
+];
 
 function getAllowedOrigins(env) {
   const raw = env.ALLOWED_ORIGIN || env.ALLOWED_ORIGINS || '';
@@ -27,18 +32,24 @@ function getAllowedOrigins(env) {
     .filter(Boolean);
 }
 
+/**
+ * Only set `Access-Control-Allow-Origin` when the request `Origin` is allowlisted.
+ * Sending a *different* allowed origin than the browser sent breaks CORS (e.g. www vs apex).
+ */
 function corsHeaders(request, env) {
   const origin = request.headers.get('Origin');
   const allowed = getAllowedOrigins(env);
-  const allow =
-    origin && allowed.includes(origin) ? origin : allowed[0] || 'https://iterations.band';
-  return {
-    'Access-Control-Allow-Origin': allow,
+  /** @type {Record<string, string>} */
+  const headers = {
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Max-Age': '86400',
     Vary: 'Origin',
   };
+  if (origin && allowed.includes(origin)) {
+    headers['Access-Control-Allow-Origin'] = origin;
+  }
+  return headers;
 }
 
 function jsonResponse(data, status, extraHeaders = {}) {

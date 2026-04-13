@@ -53,9 +53,16 @@ function logMusicEvent(kind, detail = {}) {
     (playlistSrc ? absSrc(playlistSrc) : "") ||
     (music.currentSrc || "");
 
+  const fromCtx = typeof ctx.track === "string" ? ctx.track.trim() : "";
+  const fromTitle = titleEl?.textContent?.trim() || "";
+  const trackName =
+    typeof detail.track === "string" && detail.track.trim()
+      ? detail.track.trim()
+      : fromCtx || fromTitle || "(unknown)";
+
   const body = {
     event: kind,
-    track: typeof detail.track === "string" ? detail.track : ctx.track || titleEl?.textContent?.trim() || "",
+    track: trackName,
     trackId: detail.trackId ?? ctx.trackId ?? null,
     album: typeof detail.album === "string" ? detail.album : ctx.album,
     url: absUrl || null,
@@ -71,12 +78,19 @@ function logMusicEvent(kind, detail = {}) {
       method: "POST",
       headers,
       body: JSON.stringify(body),
-      keepalive: true,
       mode: "cors",
       credentials: "omit",
-    }).catch(() => {});
-  } catch {
-    /* ignore */
+    })
+      .then(async (res) => {
+        if (res.ok) return;
+        const t = await res.text().catch(() => "");
+        console.warn("[iterations music-events]", res.status, t.slice(0, 300));
+      })
+      .catch((e) => {
+        console.warn("[iterations music-events] fetch failed", e);
+      });
+  } catch (e) {
+    console.warn("[iterations music-events]", e);
   }
 }
 
