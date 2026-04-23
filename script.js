@@ -30,24 +30,6 @@ const STUDIO_TAKES_LIST_TITLE = "Studio Takes";
 const ARTIST = "iterations";
 
 /**
- * @param {Date} date
- * @returns {string} e.g. "09:05 pm 04/13/2026" (12h, lowercase am/pm, mm/dd/yyyy; local clock)
- */
-function formatTimestampAmPmMdYyyy(date) {
-  let h = date.getHours();
-  const min = date.getMinutes();
-  const ampm = h >= 12 ? "pm" : "am";
-  h = h % 12;
-  if (h === 0) h = 12;
-  const hh = String(h).padStart(2, "0");
-  const mStr = String(min).padStart(2, "0");
-  const mm = String(date.getMonth() + 1).padStart(2, "0");
-  const dd = String(date.getDate()).padStart(2, "0");
-  const yyyy = date.getFullYear();
-  return `${hh}:${mStr} ${ampm} ${mm}/${dd}/${yyyy}`;
-}
-
-/**
  * Cloudflare Worker music telemetry (`POST …/log`). Set `window.MUSIC_EVENTS_LOG_URL` in index.html.
  * @param {"play" | "download"} kind
  * @param {Record<string, unknown>} [detail]
@@ -85,7 +67,7 @@ function logMusicEvent(kind, detail = {}) {
     trackId: detail.trackId ?? ctx.trackId ?? null,
     album: typeof detail.album === "string" ? detail.album : ctx.album,
     url: absUrl || null,
-    clientTs: formatTimestampAmPmMdYyyy(new Date()),
+    clientTs: new Date().toISOString(),
     extra: { mode, ...(ctx.extra && typeof ctx.extra === "object" ? ctx.extra : {}), ...(detail.extra && typeof detail.extra === "object" ? detail.extra : {}) },
   };
 
@@ -401,28 +383,6 @@ function absSrc(pathOrUrl) {
 }
 
 function playSong() {
-  // #region agent log
-  fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "505fcf" },
-    body: JSON.stringify({
-      sessionId: "505fcf",
-      runId: "studio-play-debug",
-      hypothesisId: "H2,H4",
-      location: "script.js:playSong:entry",
-      message: "playSong called",
-      data: {
-        mode,
-        paused: music.paused,
-        currentSrc: music.currentSrc || "",
-        datasetSrc: music.dataset.playlistSrc || "",
-        readyState: music.readyState,
-        currentTime: music.currentTime,
-      },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
   playIcon.classList.replace("fa-play", "fa-pause");
   playBtn.setAttribute("title", "Pause");
   playBtn.querySelector(".sr-only").textContent = "Pause";
@@ -431,58 +391,12 @@ function playSong() {
     p
       .then(() => {
         isPlaying = true;
-        // #region agent log
-        fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "505fcf" },
-          body: JSON.stringify({
-            sessionId: "505fcf",
-            runId: "studio-play-debug",
-            hypothesisId: "H4",
-            location: "script.js:playSong:resolved",
-            message: "play resolved",
-            data: {
-              mode,
-              currentSrc: music.currentSrc || "",
-              datasetSrc: music.dataset.playlistSrc || "",
-              readyState: music.readyState,
-              currentTime: music.currentTime,
-              paused: music.paused,
-            },
-            timestamp: Date.now(),
-          }),
-        }).catch(() => {});
-        // #endregion
       })
-      .catch((err) => {
+      .catch(() => {
         isPlaying = false;
         playIcon.classList.replace("fa-pause", "fa-play");
         playBtn.setAttribute("title", "Play");
         playBtn.querySelector(".sr-only").textContent = "Play";
-        // #region agent log
-        fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "505fcf" },
-          body: JSON.stringify({
-            sessionId: "505fcf",
-            runId: "studio-play-debug",
-            hypothesisId: "H4",
-            location: "script.js:playSong:rejected",
-            message: "play rejected",
-            data: {
-              mode,
-              currentSrc: music.currentSrc || "",
-              datasetSrc: music.dataset.playlistSrc || "",
-              readyState: music.readyState,
-              currentTime: music.currentTime,
-              paused: music.paused,
-              errorName: err && err.name ? err.name : "",
-              errorMessage: err && err.message ? err.message : "",
-            },
-            timestamp: Date.now(),
-          }),
-        }).catch(() => {});
-        // #endregion
       });
   } else {
     isPlaying = true;
@@ -506,21 +420,6 @@ function loadAndPrime(src, title, artist, downloadName) {
   music.load();
   downloadLink.href = abs;
   if (downloadName) downloadLink.setAttribute("download", downloadName);
-  // #region agent log
-  fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "505fcf" },
-    body: JSON.stringify({
-      sessionId: "505fcf",
-      runId: "seek-debug",
-      hypothesisId: "H2",
-      location: "script.js:loadAndPrime",
-      message: "player source loaded",
-      data: { mode, src, abs, downloadName: downloadName || "", readyState: music.readyState },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
 }
 
 function setPlaylistTitle(text) {
@@ -879,28 +778,6 @@ function renderStudioTakesAlbumList(options = {}) {
       cue.textContent = "›";
       li.setAttribute("aria-label", `Open studio takes for ${track.displayName}`);
       li.addEventListener("click", () => {
-        // #region agent log
-        fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "505fcf" },
-          body: JSON.stringify({
-            sessionId: "505fcf",
-            runId: "studio-play-debug",
-            hypothesisId: "H1,H3",
-            location: "script.js:renderStudioTakesAlbumList:click",
-            message: "studio track folder opened",
-            data: {
-              trackId: track.id,
-              displayName: track.displayName,
-              takeCount: studioTakesRowsForTrack(track).length,
-              currentSrc: music.currentSrc || "",
-              datasetSrc: music.dataset.playlistSrc || "",
-              songIndex,
-            },
-            timestamp: Date.now(),
-          }),
-        }).catch(() => {});
-        // #endregion
         studioTakesView = { trackIndex: i };
         songIndex = 0;
         renderPlaylist();
@@ -924,29 +801,6 @@ function renderStudioTakesTrackList(trackIndex) {
   if (artistEl) artistEl.textContent = track.artist;
   updateProgressBar();
   const takes = studioTakesRowsForTrack(track);
-  // #region agent log
-  fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "505fcf" },
-    body: JSON.stringify({
-      sessionId: "505fcf",
-      runId: "studio-play-debug",
-      hypothesisId: "H1,H3",
-      location: "script.js:renderStudioTakesTrackList",
-      message: "studio takes list rendered",
-      data: {
-        trackId: track.id,
-        displayName: track.displayName,
-        takeCount: takes.length,
-        songIndex,
-        currentSrc: music.currentSrc || "",
-        datasetSrc: music.dataset.playlistSrc || "",
-      },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
-
   playlistEl.innerHTML = "";
   playlistEl.setAttribute("role", "listbox");
   takes.forEach((v, i) => {
@@ -968,28 +822,6 @@ function renderStudioTakesTrackList(trackIndex) {
     li.appendChild(name);
     li.appendChild(duration);
     li.addEventListener("click", () => {
-      // #region agent log
-      fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "505fcf" },
-        body: JSON.stringify({
-          sessionId: "505fcf",
-          runId: "studio-play-debug",
-          hypothesisId: "H1,H4",
-          location: "script.js:renderStudioTakesTrackList:takeClick",
-          message: "studio take clicked",
-          data: {
-            trackId: track.id,
-            takeLabel: v.label,
-            src: v.src,
-            index: i,
-            currentSrcBefore: music.currentSrc || "",
-            datasetSrcBefore: music.dataset.playlistSrc || "",
-          },
-          timestamp: Date.now(),
-        }),
-      }).catch(() => {});
-      // #endregion
       songIndex = i;
       showPlayerChrome();
       loadAndPrime(
@@ -1015,26 +847,6 @@ function renderStudioTakesTrackList(trackIndex) {
       track.artist,
       firstTake.downloadName || `${track.displayName} - ${firstTake.label}.mp3`,
     );
-    // #region agent log
-    fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "505fcf" },
-      body: JSON.stringify({
-        sessionId: "505fcf",
-        runId: "post-fix",
-        hypothesisId: "H1,H2,H3",
-        location: "script.js:renderStudioTakesTrackList:defaultLoad",
-        message: "default studio take loaded",
-        data: {
-          trackId: track.id,
-          takeLabel: firstTake.label,
-          src: firstTake.src,
-          downloadName: firstTake.downloadName || "",
-        },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {});
-    // #endregion
   }
   setActivePlaylistIndex(songIndex);
 }
@@ -1223,91 +1035,14 @@ function setProgressBar(e) {
   const width = progressContainer.clientWidth;
   const clickX = e.offsetX;
   const { duration } = music;
-  // #region agent log
-  fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "505fcf" },
-    body: JSON.stringify({
-      sessionId: "505fcf",
-      runId: "seek-debug",
-      hypothesisId: "H1,H2,H3",
-      location: "script.js:setProgressBar:entry",
-      message: "progress bar clicked",
-      data: {
-        mode,
-        width,
-        clickX,
-        duration,
-        currentTime: music.currentTime,
-        readyState: music.readyState,
-        paused: music.paused,
-        src: music.currentSrc || music.src || "",
-      },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
   if (!duration || !isFinite(duration) || !width) {
-    // #region agent log
-    fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "505fcf" },
-      body: JSON.stringify({
-        sessionId: "505fcf",
-        runId: "seek-debug",
-        hypothesisId: "H2,H3",
-        location: "script.js:setProgressBar:abort",
-        message: "seek aborted",
-        data: { duration, width, currentTime: music.currentTime, readyState: music.readyState },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {});
-    // #endregion
     return;
   }
   const nextTime = (clickX / width) * duration;
   music.currentTime = nextTime;
-  // #region agent log
-  fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "505fcf" },
-    body: JSON.stringify({
-      sessionId: "505fcf",
-      runId: "seek-debug",
-      hypothesisId: "H3,H4",
-      location: "script.js:setProgressBar:assigned",
-      message: "seek assigned",
-      data: { width, clickX, duration, nextTime, currentTimeAfterAssign: music.currentTime, seekable: music.seekable.length },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
 }
 
 playBtn.addEventListener("click", () => {
-  // #region agent log
-  fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "505fcf" },
-    body: JSON.stringify({
-      sessionId: "505fcf",
-      runId: "studio-play-debug",
-      hypothesisId: "H2,H4",
-      location: "script.js:playBtn:click",
-      message: "play button clicked",
-      data: {
-        mode,
-        isPlaying,
-        currentSrc: music.currentSrc || "",
-        datasetSrc: music.dataset.playlistSrc || "",
-        readyState: music.readyState,
-        paused: music.paused,
-        currentTime: music.currentTime,
-      },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
   if (mode === null) return;
   isPlaying ? pauseSong() : playSong();
 });
@@ -1343,27 +1078,6 @@ if (downloadLink) {
   });
 }
 music.addEventListener("loadedmetadata", () => {
-  // #region agent log
-  fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "505fcf" },
-    body: JSON.stringify({
-      sessionId: "505fcf",
-      runId: "seek-debug",
-      hypothesisId: "H2",
-      location: "script.js:loadedmetadata",
-      message: "metadata loaded",
-      data: {
-        duration: music.duration,
-        currentTime: music.currentTime,
-        readyState: music.readyState,
-        seekable: music.seekable.length,
-        src: music.currentSrc || music.src || "",
-      },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
   syncPlaylistRowDurationFromPlayer();
   updateProgressBar();
 });
@@ -1382,28 +1096,6 @@ music.addEventListener("error", () => {
   if (music.error) {
     console.warn("Audio error", music.error.code, music.error.message, music.src);
   }
-});
-music.addEventListener("seeked", () => {
-  // #region agent log
-  fetch("http://127.0.0.1:7357/ingest/0f7642a4-1bac-474e-a702-30ee67b48ba4", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "505fcf" },
-    body: JSON.stringify({
-      sessionId: "505fcf",
-      runId: "seek-debug",
-      hypothesisId: "H4",
-      location: "script.js:seeked",
-      message: "seek completed",
-      data: {
-        currentTime: music.currentTime,
-        duration: music.duration,
-        readyState: music.readyState,
-        src: music.currentSrc || music.src || "",
-      },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
 });
 progressContainer.addEventListener("click", setProgressBar);
 
@@ -1440,37 +1132,6 @@ function syncPlaylistDrawer() {
 
   const narrow = playerShellContentInlineSize(playerShell) <= NARROW_SHELL_PX;
 
-  // #region agent log
-  {
-    const sh = playerShell.getBoundingClientRect().height;
-    const ih =
-      playerShell.querySelector(".player-shell-inner")?.getBoundingClientRect().height ?? 0;
-    fetch("http://127.0.0.1:7626/ingest/fcca8389-a788-4691-a60a-d529e0a47596", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "b5d82f" },
-      body: JSON.stringify({
-        sessionId: "b5d82f",
-        runId: "viewport-card",
-        hypothesisId: "H5",
-        location: "script.js:syncPlaylistDrawer",
-        message: "drawer sync",
-        data: {
-          mode,
-          narrow,
-          playlistExpanded: playerShell.classList.contains("playlist-expanded"),
-          panelParentId: playlistPanel.parentElement?.id || null,
-          vpH: typeof window !== "undefined" ? Math.round(window.innerHeight) : null,
-          shellH: Math.round(sh),
-          innerH: Math.round(ih),
-          shellMaxH: getComputedStyle(playerShell).maxHeight,
-          shellOverflow: getComputedStyle(playerShell).overflow,
-        },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {});
-  }
-  // #endregion
-
   if (mode === null && narrow) {
     playlistToggle.setAttribute("aria-expanded", "true");
     syncPickPlaylistPanelSlot();
@@ -1500,27 +1161,6 @@ function syncPickPlaylistPanelSlot() {
   const suite = playerShell.querySelector(".playlist-suite");
   const header = suite?.querySelector(".playlist-header");
   if (!suite || !header) {
-    // #region agent log
-    fetch("http://127.0.0.1:7626/ingest/fcca8389-a788-4691-a60a-d529e0a47596", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "b5d82f" },
-      body: JSON.stringify({
-        sessionId: "b5d82f",
-        runId: "pre-fix",
-        hypothesisId: "H4",
-        location: "script.js:syncPickPlaylistPanelSlot",
-        message: "early return: missing suite or header",
-        data: {
-          hasSuite: !!suite,
-          hasHeader: !!header,
-          mode,
-          panelParentId: playlistPanel.parentElement?.id || null,
-          panelInMain: playlistPanel.parentElement === playerMainEl,
-        },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {});
-    // #endregion
     return;
   }
 
@@ -1531,69 +1171,12 @@ function syncPickPlaylistPanelSlot() {
     if (playlistPanel.parentElement !== playerMainEl) {
       playerMainEl.appendChild(playlistPanel);
     }
-    // #region agent log
-    {
-      const cs = getComputedStyle(playerMainEl);
-      const r = playerMainEl.getBoundingClientRect();
-      fetch("http://127.0.0.1:7626/ingest/fcca8389-a788-4691-a60a-d529e0a47596", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "b5d82f" },
-        body: JSON.stringify({
-          sessionId: "b5d82f",
-          runId: "pre-fix",
-          hypothesisId: "H1",
-          location: "script.js:syncPickPlaylistPanelSlot",
-          message: "after pick+narrow branch",
-          data: {
-            mode,
-            pick,
-            narrow,
-            panelParentId: playlistPanel.parentElement?.id || null,
-            shellPickClass: playerShell.classList.contains("player-shell--pick-mode"),
-            aspectRatio: cs.aspectRatio,
-            mainW: Math.round(r.width),
-            mainH: Math.round(r.height),
-          },
-          timestamp: Date.now(),
-        }),
-      }).catch(() => {});
-    }
-    // #endregion
     return;
   }
 
   if (playlistPanel.parentElement === playerMainEl) {
     header.insertAdjacentElement("afterend", playlistPanel);
   }
-  // #region agent log
-  {
-    const cs = getComputedStyle(playerMainEl);
-    const r = playerMainEl.getBoundingClientRect();
-    fetch("http://127.0.0.1:7626/ingest/fcca8389-a788-4691-a60a-d529e0a47596", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "b5d82f" },
-      body: JSON.stringify({
-        sessionId: "b5d82f",
-        runId: "pre-fix",
-        hypothesisId: "H1",
-        location: "script.js:syncPickPlaylistPanelSlot",
-        message: "after restore / non-pick path",
-        data: {
-          mode,
-          pick,
-          narrow,
-          panelParentId: playlistPanel.parentElement?.id || null,
-          panelInMainWhileListening: mode !== null && playlistPanel.parentElement === playerMainEl,
-          shellPickClass: playerShell.classList.contains("player-shell--pick-mode"),
-          aspectRatio: cs.aspectRatio,
-          mainW: Math.round(r.width),
-          mainH: Math.round(r.height),
-        },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {});
-  }
-  // #endregion
 }
 
 if (playerShell && playlistToggle && playlistPanel) {

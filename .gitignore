@@ -1,0 +1,4 @@
+.DS_Store
+.cursor/debug*.log
+.wrangler/
+workers/music-events/.wrangler/

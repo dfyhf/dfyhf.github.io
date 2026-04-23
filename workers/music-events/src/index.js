@@ -62,21 +62,6 @@ function jsonResponse(data, status, extraHeaders = {}) {
   });
 }
 
-/** @param {Date} date — use UTC fields (Workers clock is UTC). */
-function formatTimestampAmPmMdYyyyUtc(date) {
-  let h = date.getUTCHours();
-  const min = date.getUTCMinutes();
-  const ampm = h >= 12 ? 'pm' : 'am';
-  h = h % 12;
-  if (h === 0) h = 12;
-  const hh = String(h).padStart(2, '0');
-  const mStr = String(min).padStart(2, '0');
-  const mm = String(date.getUTCMonth() + 1).padStart(2, '0');
-  const dd = String(date.getUTCDate()).padStart(2, '0');
-  const yyyy = date.getUTCFullYear();
-  return `${hh}:${mStr} ${ampm} ${mm}/${dd}/${yyyy}`;
-}
-
 function collectCfGeo(cf) {
   if (!cf || typeof cf !== 'object') return {};
   return {
@@ -180,7 +165,7 @@ async function handlePostLog(request, env, ctx, baseHeaders) {
 
   const record = {
     id,
-    receivedAt: formatTimestampAmPmMdYyyyUtc(new Date()),
+    receivedAt: new Date().toISOString(),
     event,
     track: body.track ?? null,
     trackId: body.trackId ?? null,
